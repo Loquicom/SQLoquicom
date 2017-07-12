@@ -22,6 +22,7 @@ require_once 'system/config.php';
 
 //Class mere des controllers et models
 require_once 'system/controllers/ControllerIni.php';
+require_once 'system/models/ModelIni.php';
 
 //Adaptation du niveau d'erreur
 if ($_config['mode'] == 'dev') {

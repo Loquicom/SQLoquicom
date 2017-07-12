@@ -12,3 +12,9 @@
  * tous autre laisse par defaut
  */
 $_config['mode'] = 'dev';
+
+
+$_config['root'] = '/SQLoquicom/';
+
+
+$_config['web_root'] = 'http://localhost/SQLoquicom/';

@@ -11,6 +11,10 @@ $_load = Loader::get_loader();
 //Si on reçoit des parametres en POST on les traites
 if (isset($_POST['host']) && isset($_POST['name']) && isset($_POST['usr']) && isset($_POST['pass'])) {
     $_S['db'] = $_POST;
+    //Si keep est present on sauvegarde les données dans un fichier dans data
+    if (isset($_POST['keep'])) {
+        
+    }
 }
 //Connxion à la BD
 require_once 'system/Database.param.php';
@@ -34,10 +38,69 @@ if (!$_db) {
 }
 
 //Si le script actuel n'est pas le script appelé on route, sinon on affiche la page de base d'affichage
-$scriptAppeler = $_SERVER['REQUEST_URI'] . ((explode('/', $_SERVER['REQUEST_URI'])[count(explode('/', $_SERVER['REQUEST_URI'])) - 1] != 'index')?'index.php':'');
+$scriptAppeler = $_SERVER['REQUEST_URI'] . ((explode('/', $_SERVER['REQUEST_URI'])[count(explode('/', $_SERVER['REQUEST_URI'])) - 1] != 'index') ? 'index.php' : '');
 if ($scriptAppeler == $_SERVER['SCRIPT_NAME']) {
     $_load->load_controller('Affichage');
     $_load->affichage->index();
 } else {
-    var_dump($_SERVER);
+    //On retire la base de l'adresse
+    $path = str_replace($_config['root'], '', $_SERVER['REQUEST_URI']);
+    //On decoupe le reste
+    $path = explode('/', $path);
+    if (count($path) > 0) {
+        //On prepare l'appel de la fonction
+        $name = uniqid(md5(mt_rand(1, 1000000000)), true) . '.php';
+        $file = fopen('system/tmp/' . $name, 'w');
+        $content = "<?php \r\n";
+        //Passage tous les warning, notice, ... en exception pour pouvoir les attraper avec un try catch
+        $content .= 'set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {if (0 === error_reporting()) {return false;}throw new ErrorException($errstr, 0, $errno, $errfile, $errline);});' . "\r\n";
+        $content .= '$_load->' . "load_controller('" . $path[0] . "'); \r\n";
+        $content .= '$_load->' . strtolower($path[0]) . "->" . ((isset($path[1])) ? $path[1] : 'index') . '(';
+        //Si il y a des parametres
+        $var = '';
+        if (count($path) > 2) {
+            for ($i = 2; $i < count($path); $i++) {
+                $varName = randomString();
+                $$varName = $path[$i];
+                $var .= '$' . $varName . ',';
+            }
+            $var = rtrim($var, ",");
+        }
+        $content .= $var . ');' . "\r\n";
+        $content .= 'restore_error_handler();';
+        //Ecriture
+        fwrite($file, $content);
+        //Fermeture
+        fclose($file);
+
+        try {
+            //On require le fichier qui va appeler la fonction
+            require 'system/tmp/' . $name;
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        //Suppr du fichier
+        unlink('system/tmp/' . $name);
+    } else {
+        
+    }
+}
+
+
+/*
+ * Create a random string
+ * @author  XEWeb <>
+ * @param $length the length of the string to create
+ * @return $str the string
+ */
+
+function randomString($length = 10) {
+    $str = "";
+    $characters = array_merge(range('A', 'Z'), range('a', 'z'));
+    $max = count($characters) - 1;
+    for ($i = 0; $i < $length; $i++) {
+        $rand = mt_rand(0, $max);
+        $str .= $characters[$rand];
+    }
+    return $str;
 }

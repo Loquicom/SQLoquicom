@@ -4,9 +4,10 @@
 class Loader {
 
     private static $instance = null;
+    public $models;
 
     private function __construct() {
-        
+        $this->models = new LoadModel();
     }
 
     public static function get_loader() {
@@ -94,8 +95,37 @@ class Loader {
         return false;
     }
 
-    public function load_model() {
-        
+    public function load_model($name) {
+        //On determine le chemin du fichier
+        if (self::in_system()) {
+            $path = 'models/';
+        } else {
+            $path = 'system/models/';
+        }
+        //Mise du nom en minuscule
+        $minusName = strtolower($name);
+        //On regarde si le fichier existe
+        if (file_exists($path . $name . '.php') && $this->models->notSet($name)) {
+            //Chargement
+            $this->models->add($name, $path . $name . '.php');
+            return true;
+        }
+        return false;
     }
 
+}
+
+class LoadModel{
+    
+    function notSet($name){
+        $minusName = strtolower($name);
+        return !isset($this->$minusName);
+    }
+    
+    function add($name, $file){
+        $minusName = strtolower($name);
+        require $file;
+        $this->$minusName = new $name();
+    }
+    
 }
