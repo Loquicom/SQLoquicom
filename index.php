@@ -38,23 +38,28 @@ if (!$_db) {
     }
 }
 
-
 if (!isset($_GET['r']) || empty($_GET['r']) || trim($_GET['r']) == '') {
     $_load->load_controller('Affichage');
     $_load->affichage->index();
 } else {
-    //On decoupe l' adresse
-    $path = explode('/', $_GET['r']);
+    //On s'occupe du routage en generant le fichier a appeler et en l'appelant
+    fileRoutage($_GET['r']);
+}
+
+
+/* ===== Fonction ===== */
+
+function fileRoutage($path, $errController = 'ErreurC', $errMethod = 'ErreurM') {
+    $path = explode('/', $path);
     if (count($path) > 0) {
         //On prepare l'appel de la fonction
         $name = uniqid(md5(mt_rand(1, 1000000000)), true) . '.php';
         $file = fopen('system/tmp/' . $name, 'w');
         $content = "<?php \r\n";
-        //Passage tous les warning, notice, ... en exception pour pouvoir les attraper avec un try catch
-        $content .= 'try{' . "\r\n";
-        $content .= 'set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {if (0 === error_reporting()) {return false;}throw new ErrorException($errstr, 0, $errno, $errfile, $errline);});' . "\r\n";
-        $content .= '$_load->' . "load_controller('" . $path[0] . "'); \r\n";
-        $content .= '$_load->' . strtolower($path[0]) . "->" . ((isset($path[1])) ? $path[1] : 'index') . '(';
+        $content .= 'global $_load;' . "\r\n";
+        $content .= 'if($_load->' . "load_controller('" . $path[0] . "') === false){exit('" . $errController . "');} \r\n";
+        $content .= 'if(!method_exists($_load->' . strtolower($path[0]) . ', "' . ((isset($path[1]) && trim($path[1]) != '') ? $path[1] : 'index') . '")){exit("' . $errMethod . '");}' . "\r\n";
+        $content .= '$_load->' . strtolower($path[0]) . "->" . ((isset($path[1]) && trim($path[1]) != '') ? $path[1] : 'index') . '(';
         //Si il y a des parametres
         $var = '';
         if (count($path) > 2) {
@@ -65,14 +70,11 @@ if (!isset($_GET['r']) || empty($_GET['r']) || trim($_GET['r']) == '') {
             }
             $var = rtrim($var, ",");
         }
-        $content .= $var . ');' . "\r\n";
-        $content .= 'restore_error_handler();' . "\r\n";
-        $content .= '} catch(Exception $excep) {echo "Erreur";}';
+        $content .= $var . ');';
         //Ecriture
         fwrite($file, $content);
         //Fermeture
         fclose($file);
-
         try {
             //On require le fichier qui va appeler la fonction
             require 'system/tmp/' . $name;
@@ -85,7 +87,6 @@ if (!isset($_GET['r']) || empty($_GET['r']) || trim($_GET['r']) == '') {
         
     }
 }
-
 
 /*
  * Create a random string
