@@ -38,16 +38,13 @@ if (!$_db) {
     }
 }
 
-//Si le script actuel n'est pas le script appelé on route, sinon on affiche la page de base d'affichage
-$scriptAppeler = $_SERVER['REQUEST_URI'] . ((explode('/', $_SERVER['REQUEST_URI'])[count(explode('/', $_SERVER['REQUEST_URI'])) - 1] != 'index') ? 'index.php' : '');
-if ($scriptAppeler == $_SERVER['SCRIPT_NAME']) {
+
+if (!isset($_GET['r']) || empty($_GET['r']) || trim($_GET['r']) == '') {
     $_load->load_controller('Affichage');
     $_load->affichage->index();
 } else {
-    //On retire la base de l'adresse
-    $path = str_replace($_config['root'], '', $_SERVER['REQUEST_URI']);
-    //On decoupe le reste
-    $path = explode('/', $path);
+    //On decoupe l' adresse
+    $path = explode('/', $_GET['r']);
     if (count($path) > 0) {
         //On prepare l'appel de la fonction
         $name = uniqid(md5(mt_rand(1, 1000000000)), true) . '.php';
