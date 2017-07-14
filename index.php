@@ -34,6 +34,7 @@ if (!$_db) {
         echo $_err;
         $_err = null;
         session_destroy();
+        exit;
     }
 }
 
@@ -53,6 +54,7 @@ if ($scriptAppeler == $_SERVER['SCRIPT_NAME']) {
         $file = fopen('system/tmp/' . $name, 'w');
         $content = "<?php \r\n";
         //Passage tous les warning, notice, ... en exception pour pouvoir les attraper avec un try catch
+        $content .= 'try{' . "\r\n";
         $content .= 'set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {if (0 === error_reporting()) {return false;}throw new ErrorException($errstr, 0, $errno, $errfile, $errline);});' . "\r\n";
         $content .= '$_load->' . "load_controller('" . $path[0] . "'); \r\n";
         $content .= '$_load->' . strtolower($path[0]) . "->" . ((isset($path[1])) ? $path[1] : 'index') . '(';
@@ -67,7 +69,8 @@ if ($scriptAppeler == $_SERVER['SCRIPT_NAME']) {
             $var = rtrim($var, ",");
         }
         $content .= $var . ');' . "\r\n";
-        $content .= 'restore_error_handler();';
+        $content .= 'restore_error_handler();' . "\r\n";
+        $content .= '} catch(Exception $excep) {echo "Erreur";}';
         //Ecriture
         fwrite($file, $content);
         //Fermeture

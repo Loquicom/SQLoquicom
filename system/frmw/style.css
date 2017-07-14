@@ -23,3 +23,7 @@ nav>a:hover{
     width: 40%;
     background-color: black;
 }
+
+.center{
+    text-align: center;
+}

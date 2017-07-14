@@ -13,6 +13,10 @@ global $_config;
         <link type="text/css" rel="stylesheet" href="<?=$_config['web_root']?>system/frmw/schemaUI.css"/>
         <link type="text/css" rel="stylesheet" href="<?=$_config['web_root']?>system/frmw/animate.css"/>
         <link type="text/css" rel="stylesheet" href="<?=$_config['web_root']?>system/frmw/style.css"/>
+        <!--Import jQuery and js-->
+        <script type="text/javascript" src="<?=$_config['web_root']?>system/frmw/jquery.min.js"></script>
+        <script type="text/javascript" src="<?=$_config['web_root']?>system/frmw/schemaUI.js"></script>
+        <script type="text/javascript" src="<?=$_config['web_root']?>system/frmw/script.js"></script>
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -64,9 +68,5 @@ global $_config;
             <?= $body ?>
         </main>
 
-        <!--Import jQuery and js-->
-        <script type="text/javascript" src="<?=$_config['web_root']?>system/frmw/jquery.min.js"></script>
-        <script type="text/javascript" src="<?=$_config['web_root']?>system/frmw/schemaUI.js"></script>
-        <script type="text/javascript" src="<?=$_config['web_root']?>system/frmw/script.js"></script>
     </body>
 </html>
