@@ -59,10 +59,10 @@ function fileRoutage($path, $errController = 'ErreurC', $errMethod = 'ErreurM') 
         $content .= 'global $_load;' . "\r\n";
         $content .= 'if($_load->' . "load_controller('" . $path[0] . "') === false){exit('" . $errController . "');} \r\n";
         $content .= 'if(!method_exists($_load->' . strtolower($path[0]) . ', "' . ((isset($path[1]) && trim($path[1]) != '') ? $path[1] : 'index') . '")){exit("' . $errMethod . '");}' . "\r\n";
-        $content .= '$_load->' . strtolower($path[0]) . "->" . ((isset($path[1]) && trim($path[1]) != '') ? $path[1] : 'index') . '(';
+        $content .= '@$_load->' . strtolower($path[0]) . "->" . ((isset($path[1]) && trim($path[1]) != '') ? $path[1] : 'index') . '(';
         //Si il y a des parametres
         $var = '';
-        if (count($path) > 2) {
+        if (count($path) > 2 && trim($path[2]) != '') {
             for ($i = 2; $i < count($path); $i++) {
                 $varName = randomString();
                 $$varName = $path[$i];
