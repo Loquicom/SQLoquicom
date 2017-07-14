@@ -11,8 +11,13 @@ class ControllerIni{
         $this->model = $_load->models;
     }
     
-    function errorArgs($name = '', $nb = 0){
-        exit("Erreur " . $name . $nb);
+    function verifArgs($num, $args, $method){
+        //Verifie qu'il y a le bon nombre d'argument
+        if(!(count($args) >= $num)){
+            //Erreur
+            exit('ErreurArg : ' . $method);
+        }
     }
+    
     
 }

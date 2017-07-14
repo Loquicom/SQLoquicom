@@ -27,3 +27,14 @@ nav>a:hover{
 .center{
     text-align: center;
 }
+
+li > .active {
+    background-color: #ffc107 !important;
+    color: black !important;
+    border-color: #ffc107 !important;
+}
+
+.form-element:focus{
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 8px rgba(255, 193, 7, 0.6) !important;
+}
