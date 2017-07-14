@@ -15,7 +15,8 @@ class Affichage extends ControllerIni{
     }
     
     public function table($name){
-        (func_num_args() == 1)?null:exit('ErreurA');
+        (func_num_args() >= 1)?null:$this->errorArgs('table', 1);
+        //Code
         $column = $this->model->affichage_model->getColumn($name);
         $page = $this->load->load_view('table', array('nom' => $name, 'column' => $column, 'content' => null), true);
         $this->load->load_view('webpage', array('body' => $page));

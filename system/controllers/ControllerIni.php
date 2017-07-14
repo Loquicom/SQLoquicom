@@ -11,4 +11,8 @@ class ControllerIni{
         $this->model = $_load->models;
     }
     
+    function errorArgs($name = '', $nb = 0){
+        exit("Erreur " . $name . $nb);
+    }
+    
 }
