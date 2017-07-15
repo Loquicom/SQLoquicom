@@ -24,11 +24,6 @@ class Modif_model extends ModelIni {
     public function execute($sql){
         $requete = $this->db->prepare($sql);
         $requete->execute();
-        $result = $requete->fetchAll();
-        if ($result === false) {
-            return false;
-        }
-        return true;
     }
 
 }

@@ -23,9 +23,9 @@ class Modification extends ControllerIni {
             $i = 0;
             foreach ($val as $value) {
                 if ($i == 0) {
-                    $sql .= " Where " . $pk[$i] . " = " . $value;
+                    $sql .= " Where " . $pk[$i] . " = '" . $value . "'";
                 } else {
-                    $sql .= " And " . $pk[$i] . " = " . $value;
+                    $sql .= " And " . $pk[$i] . " = '" . $value . "'";
                 }
                 $i++;
             }
