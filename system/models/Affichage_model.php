@@ -34,9 +34,13 @@ class Affichage_model extends ModelIni {
         if ($result === false) {
             return false;
         }
-        $return = array();
+        $return = array('list' => array(), 'pk' => array());
         foreach ($result as $champ) {
-            $return[] = $champ['Field'];
+            //On recupere les clef primaire
+            if($champ['Key'] == 'PRI'){
+                $return['pk'][] = $champ['Field'];
+            }
+            $return['list'][] = $champ['Field'];
         }
         return $return;
     }
@@ -57,6 +61,17 @@ class Affichage_model extends ModelIni {
         $fin = $debut + $limit;
         //Requete
         $requete = $this->db->prepare("Select * From " . $table . " Order by " . $order . " limit " . $debut . ", " . $fin);
+        $requete->execute();
+        $result = $requete->fetchAll();
+        if ($result === false) {
+            return false;
+        }
+        return $result;
+    }
+    
+    
+    public function getInfo($table) {
+        $requete = $this->db->prepare("Describe " . $table);
         $requete->execute();
         $result = $requete->fetchAll();
         if ($result === false) {

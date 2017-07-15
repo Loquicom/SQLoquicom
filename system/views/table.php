@@ -6,12 +6,40 @@ global $_config;
 <div class="container">
     <div class="row-fluid">
         <div class="col8">
-            <h1><?= $nom ?></h1>
+            <h1><?= $nom ?> <i id="show_info" class="material-icons pointer" title="Information sur la table">add_circle</i></h1>
         </div>
         <div class="col4">
             <div class="form-group">
                 <label for="limit">Nombre d'élément par page</label>
                 <input type="number" class="form-element" id="limit" value="<?= $limit ?>" min="1">
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid hide" id="info" style="padding-bottom: 5em;">
+        <div class="col12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Champ</th>
+                        <th>Type</th>
+                        <th>Null</th>
+                        <th>Clef</th>
+                        <th>Defaut</th>
+                        <th>Extra</th>
+                    </tr>
+                </thead>
+                <tbody id="table_info">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr>
+    <div class="row-fluid">
+        <div class="col12">
+            <span class="btn-label warning">Boutons d'actions</span><br>
+            <div class="btn-group">
+                <button class="btn btn-warning btn_action" data-action="update" title="modifier"><i class="material-icons">description</i></button>
+                <button class="btn btn-warning btn_action" data-action="delete" title="supprimer"><i class="material-icons">delete_forever</i></button>
             </div>
         </div>
     </div>
@@ -21,7 +49,14 @@ global $_config;
                 <thead>
                     <tr>
                         <?php
+                        if (!empty($pk)) {
+                            echo '<th class="center">Actions</th>';
+                        }
                         foreach ($column as $col) {
+                            //Si c'est une clef primaire
+                            if (in_array($col, $pk)) {
+                                $col = '<div style="position: relative;">' . $col . '<i class="material-icons" style="position: absolute; top:-10px;">vpn_key</i></div>';
+                            }
                             echo '<th class="sort_table">' . $col . '</th>';
                         }
                         ?>
@@ -30,6 +65,14 @@ global $_config;
                 <tbody id="table_content">
                 </tbody>
             </table>
+            <!-- Clef primaire -->
+            <?php
+            if (!empty($pk)) {
+                foreach ($pk as $clef) {
+                    echo '<input class="pk" type="hidden" name="pk[]" value="' . $clef . '">';
+                }
+            }
+            ?>
         </div>
     </div>
     <div class="row-fluid">
@@ -130,15 +173,56 @@ global $_config;
         $('#limit').on('change', function () {
             //Mise a jour du contenue en updatant la page
             if ($(this).val() > 0) {
-                location.href = '<?= $_config['web_root'] ?>Affichage/table/<?= $nom ?>/' +  Math.round($(this).val());
+                location.href = '<?= $_config['web_root'] ?>Affichage/table/<?= $nom ?>/' + Math.round($(this).val());
+            }
+        });
+
+        //Charge le tableau d'info
+        $.post('<?= $_config['web_root'] ?>Affichage/ajx_tableInfo', {'table': '<?= $nom ?>'}, function (data) {
+            $('#table_info').html(data);
+        });
+
+        //Afficher/Cacher tableau d'info
+        $('#show_info').on('click', function () {
+            if ($('#info').hasClass('hide')) {
+                $('#info').slideDown('slow').removeClass('hide');
+                $(this).html('remove_circle');
+            } else {
+                $('#info').slideUp('slow').addClass('hide');
+                $(this).html('add_circle');
+            }
+        });
+
+        //Action sur la table
+        $('.btn_action').on('click', function () {
+            var action = $(this).attr('data-action');
+            var params = prepare_post('#table_content', {'table': '<?= $nom ?>'});
+            if (action == 'update') {
+                //Mise à jour des lignes concerner
+
+            } else if (action == 'delete') {
+                //Suppression desl igne slectionnée
+                $.post('<?= $_config['web_root'] ?>Modification/ajx_delete', params, function (data) {
+                    console.log(data);
+                });
+            } else {
+                //Autre => Erreur
+
             }
         });
 
     });
 
     function updateTab(page = 1, limit = <?= $limit ?>, order = '') {
+        var params = [];
+        params.push({'name': 'table', 'value': '<?= $nom ?>'});
+        params.push({'name': 'page', 'value': page});
+        params.push({'name': 'limit', 'value': limit});
+        $('.pk').each(function () {
+            params.push({'name': $(this).attr('name'), 'value': $(this).val()});
+        });
         if (order.trim() === '') {
-            $.post('<?= $_config['web_root'] ?>Affichage/ajx_tableContent', {'table': '<?= $nom ?>', 'page': page, 'limit': limit}, function (data) {
+            $.post('<?= $_config['web_root'] ?>Affichage/ajx_tableContent', params, function (data) {
                 $('#table_content').html(data);
             });
         } else {

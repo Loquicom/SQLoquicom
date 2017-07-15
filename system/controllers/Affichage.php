@@ -21,11 +21,11 @@ class Affichage extends ControllerIni {
         $column = $this->model->affichage_model->getColumn($name);
         //Nombre de pagine a avoir
         $pagine = $this->model->affichage_model->getNombreLigne($name) / $limit;
-        if(((int)$pagine) != $pagine){
-            $pagine = ((int)$pagine) + 1;
+        if (((int) $pagine) != $pagine) {
+            $pagine = ((int) $pagine) + 1;
         }
         //Chargement de la page
-        $page = $this->load->load_view('table', array('nom' => $name, 'column' => $column, 'pagine' => $pagine, 'limit' => $limit), true);
+        $page = $this->load->load_view('table', array('nom' => $name, 'column' => $column['list'], 'pk' => $column['pk'], 'pagine' => $pagine, 'limit' => $limit), true);
         $this->load->load_view('webpage', array('body' => $page));
     }
 
@@ -42,11 +42,45 @@ class Affichage extends ControllerIni {
         $return = '';
         foreach ($lines as $line) {
             $return .= '<tr>';
+            //Si il y a une primary key
+            if (isset($_POST['pk']) && is_array($_POST['pk']) && !empty($_POST['pk'])) {
+                //Creation de la valeur de la clef primaire
+                $pk = '';
+                foreach ($_POST['pk'] as $clef) {
+                    $pk .= $line[$clef] . ';';
+                }
+                $pk = rtrim($pk, ';');
+                $return .= '<td class="center"><input type="checkbox" name="pk-value[]" value="' . $pk . '"></td>';
+            }
             foreach ($line as $val) {
                 $return .= '<td>' . $val . '</td>';
             }
             $return .= '</tr>';
         }
+        echo $return;
+    }
+
+    public function ajx_tableInfo() {
+        //Verification
+        if (!isset($_POST['table'])) {
+            exit('<tr><td colspan="100%" style="text-align: center;"><h3>Données incorrect</h3></td></tr>');
+        }
+        //Recup des infos
+        $infos = $this->model->affichage_model->getInfo($_POST['table']);
+        if ($infos === null || empty($infos)) {
+            exit('<tr><td colspan="100%" style="text-align: center;"><h3>Aucune information</h3></td></tr>');
+        }
+        //Generation du html
+        $return = '';
+        foreach ($infos as $info){
+            $return .= '<tr>';
+            foreach ($info as $i){
+                $return .= '<td>' . $i . '</td>';
+            }
+            $return .= '</tr>';
+        }
+        //On change clef primaire et etrangere par PK et FK
+        $return = str_replace('MUL', 'FK', str_replace('PRI', 'PK', $return));
         echo $return;
     }
 
