@@ -38,8 +38,10 @@ global $_config;
         <div class="col12">
             <span class="btn-label warning">Boutons d'actions</span><br>
             <div class="btn-group">
+                <button class="btn btn-warning btn_action" data-action="create" title="ajouter"><i class="material-icons">playlist_add</i></button>
                 <button class="btn btn-warning btn_action" data-action="update" title="modifier"><i class="material-icons">description</i></button>
                 <button class="btn btn-warning btn_action" data-action="delete" title="supprimer"><i class="material-icons">delete_forever</i></button>
+                <button class="btn btn-warning btn_action" data-action="truncate" title="vider"><i class="material-icons">restore_page</i></button>
             </div>
         </div>
     </div>
