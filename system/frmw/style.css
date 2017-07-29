@@ -52,9 +52,28 @@ li > .active {
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
-    display: inline-block;
 }
 
 .pagination > li {
     display: inline-block;
+}
+
+.dialog_bck{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dialog_content{
+    background: white;
+    margin-top: 20%;
+    margin-left: 15%;
+    margin-right: 15%;
+    padding-top: 2em; 
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    min-height: 5em;
 }

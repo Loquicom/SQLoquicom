@@ -37,6 +37,11 @@ $(document).ready(function () {
             _change_page_pagine(_paginePageActuel + 1);
         }
     });
+    
+    //Dialog
+    $('#dialog').on('click', '.close-dialog', function(){
+        dialog();
+    });
 
 });
 
@@ -137,6 +142,18 @@ function _change_page_pagine(newPage) {
         $('#pagine-next').removeClass('disabled');
     }
     _pagineCallback(newPage);
+}
+
+function dialog(content = ''){
+    content = '' + content;
+    if(content.trim() != ''){
+        $('#dialog').css('height', $(document).height() + 'px');
+        $('#dialog_content').html(content);
+        $('#dialog').removeClass('hide');
+    } else {
+        $('#dialog').addClass('hide');
+        $('#dialog_content').html('');
+    }
 }
 
 function animate(jqueryId, animType, callBack = function() {$(this).removeClass(); }) {

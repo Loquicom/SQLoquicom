@@ -89,6 +89,24 @@ global $_config;
     </div>
 </div>
 
+<!-- Contenue pour les dialog -->
+<div id="conf_suppr" class="hide">
+    <div class="row-fluid alert a-is-warning">
+        <div class="col1">
+            <i class="material-icons">warning</i>
+        </div>
+        <div class="col11">
+            Voulez vous vraiment supprimer la sélection ?
+        </div>
+    </div>
+    <div class="row-fluid" style="padding-top: 1em; padding-bottom: 2em;">
+        <div class="offset10 col2">
+            <span style="padding-right: 1em;"><button class="btn btn-default close-dialog">Annuler</button></span>
+            <button class="btn btn-primary btn_valid_suppr">Valider</button>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $(document).ready(function () {
 
@@ -129,31 +147,43 @@ global $_config;
         $('.btn_action').on('click', function () {
             var action = $(this).attr('data-action');
             var params = prepare_post('#table_content', {'table': '<?= $nom ?>'});
-            if (action == 'update') {
-                //Mise à jour des lignes concerner
+            //Au moins une case est cochée
+            if (params.length > 1) {
+                if (action == 'update') {
+                    //Mise à jour des lignes concerner
 
-            } else if (action == 'delete') {
-                //Suppression desl igne slectionnée
-                $.post('<?= $_config['web_root'] ?>Modification/ajx_delete', params, function (data) {
-                    $('#zone_message').removeClass();
-                    if (data.etat == 'ok') {
-                        $('#zone_message').addClass('alert a-is-success').html(data.message);
-                        //Supprime les lignes avec les cases cochées
-                        $('.line_action').each(function () {
-                            if ($(this).prop('checked')) {
-                                $(this).closest('tr').remove();
-                            }
-                        });
-                    } else if (data.etat == 'err') {
-                        $('#zone_message').addClass('alert a-is-danger').html(data.message);
-                    } else {
-                        $('#zone_message').addClass('alert a-is-warning').html('Erreur inconnue');
-                    }
-                }, 'json');
-            } else {
-                //Autre => Erreur
-                $('#zone_message').addClass('alert a-is-warning').html('Erreur inconnue');
+                } else if (action == 'delete') {
+                    //Ouverture boite de dialogue pour confirmation
+                    dialog($('#conf_suppr').html());
+                } else {
+                    //Autre => Erreur
+                    $('#zone_message').addClass('alert a-is-warning').html('Erreur inconnue');
+                }
             }
+        });
+
+        //Suppr ligne
+        $('#dialog').on('click', '.btn_valid_suppr', function () {
+            //Suppression des lignes slectionnées
+            var params = prepare_post('#table_content', {'table': '<?= $nom ?>'});
+            $.post('<?= $_config['web_root'] ?>Modification/ajx_delete', params, function (data) {
+                $('#zone_message').removeClass();
+                if (data.etat == 'ok') {
+                    $('#zone_message').addClass('alert a-is-success').html(data.message);
+                    //Supprime les lignes avec les cases cochées
+                    $('.line_action').each(function () {
+                        if ($(this).prop('checked')) {
+                            $(this).closest('tr').remove();
+                        }
+                    });
+                } else if (data.etat == 'err') {
+                    $('#zone_message').addClass('alert a-is-danger').html(data.message);
+                } else {
+                    $('#zone_message').addClass('alert a-is-warning').html('Erreur inconnue');
+                }
+                //Fermeture de la dialogue
+                dialog();
+            }, 'json');
         });
 
     });

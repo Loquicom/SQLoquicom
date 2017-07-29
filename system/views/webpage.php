@@ -68,5 +68,10 @@ global $_config;
             <?= $body ?>
         </main>
 
+        <div id="dialog" class="dialog_bck hide">
+            <div id="dialog_content" class="dialog_content">
+            </div>
+        </div>
+        
     </body>
 </html>
