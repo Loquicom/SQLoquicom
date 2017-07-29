@@ -46,3 +46,15 @@ li > .active {
 .pointer:hover{
     opacity: .8;
 }
+
+.pagination{
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    display: inline-block;
+}
+
+.pagination > li {
+    display: inline-block;
+}
