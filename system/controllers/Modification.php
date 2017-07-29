@@ -9,8 +9,13 @@ class Modification extends ControllerIni {
         $this->load->load_model('Modif_model');
     }
 
+    public function ajx_update() {
+        
+    }
+
     public function ajx_delete() {
         if (count($_POST) <= 1) {
+            echo json_encode(array('etat' => 'err', 'message' => 'Parametres invalides'));
             exit;
         }
         $pk = $this->model->modif_model->getPrimary($_POST['table']);
@@ -31,6 +36,8 @@ class Modification extends ControllerIni {
             }
             //On delete
             $this->model->modif_model->execute($sql);
+            //Retour
+            echo json_encode(array('etat' => 'ok', 'message' => $i . ' ligne(s) supprimée(s)'));
         }
     }
 

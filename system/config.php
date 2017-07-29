@@ -14,7 +14,7 @@
 $_config['mode'] = 'dev';
 
 
-$_config['root'] = '/SDDEA_TEST/CRUSOE/exemples/SQLoquicom/';
+$_config['root'] = '/SQLoquicom/';
 
 
-$_config['web_root'] = 'http://mysx/SDDEA_TEST/CRUSOE/exemples/SQLoquicom/';
+$_config['web_root'] = 'http://localhost/SQLoquicom/';

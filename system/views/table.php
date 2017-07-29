@@ -36,6 +36,11 @@ global $_config;
     <hr>
     <div class="row-fluid">
         <div class="col12">
+            <div id="zone_message"></div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="col12">
             <span class="btn-label warning">Boutons d'actions</span><br>
             <div class="btn-group">
                 <button class="btn btn-warning btn_action" data-action="create" title="ajouter"><i class="material-icons">playlist_add</i></button>
@@ -213,15 +218,24 @@ global $_config;
             } else if (action == 'delete') {
                 //Suppression desl igne slectionnée
                 $.post('<?= $_config['web_root'] ?>Modification/ajx_delete', params, function (data) {
-                    console.log(data);
-                });
-            } else if (action == 'create') {
-
-            } else if (action == 'truncate') {
-
+                    $('#zone_message').removeClass();
+                    if (data.etat == 'ok') {
+                        $('#zone_message').addClass('alert a-is-success').html(data.message);
+                        //Supprime les lignes avec les cases cochées
+                        $('.line_action').each(function () {
+                            if ($(this).prop('checked')) {
+                                $(this).closest('tr').remove();
+                            }
+                        });
+                    } else if (data.etat == 'err') {
+                        $('#zone_message').addClass('alert a-is-danger').html(data.message);
+                    } else {
+                        $('#zone_message').addClass('alert a-is-warning').html('Erreur inconnue');
+                    }
+                }, 'json');
             } else {
                 //Autre => Erreur
-
+                $('#zone_message').addClass('alert a-is-warning').html('Erreur inconnue');
             }
         });
 

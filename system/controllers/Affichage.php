@@ -50,7 +50,7 @@ class Affichage extends ControllerIni {
                     $pk .= $line[$clef] . ';';
                 }
                 $pk = rtrim($pk, ';');
-                $return .= '<td class="center"><input type="checkbox" name="pk-value[]" value="' . $pk . '"></td>';
+                $return .= '<td class="center"><input class="line_action" type="checkbox" name="pk-value[]" value="' . $pk . '"></td>';
             }
             foreach ($line as $val) {
                 $return .= '<td>' . $val . '</td>';
