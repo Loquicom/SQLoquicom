@@ -7,6 +7,11 @@ require_once '_ini.php';
 require_once 'system/load.php';
 $_load = Loader::get_loader();
 
+//Si tmp n'existe pas on le créer
+if(!is_dir('system/tmp')){
+    mkdir('system/tmp');
+}
+
 //On vide le dossier tmp
 clearFolder('system/tmp');
 
@@ -90,31 +95,31 @@ function fileRoutage($path, $errController = 'ErreurC', $errMethod = 'ErreurM') 
     }
 }
 
-
-function clearFolder($folderPath, $subfolder = false){
-    //On ajoute un slash a lafin si il n'y en a pas
-    if($folderPath[strlen($folderPath) - 1] != '/'){
-        $folderPath .= '/';
-    }
-    //Recup tous les fichiers
-    $files = array_diff(scandir($folderPath), array('..', '.'));
-    //Parcours des fichiers
-    foreach ($files as $file){
-        //Si ce sont des fichiers
-        if(is_file($folderPath . $file)){
-            unlink($folderPath . $file);
-        } 
-        //Sinon ce sont des dossier et supprime seulement si subFolder = true
-        else if ($subfolder){
-            //On rapelle cette fontion pour vider le dossier
-            clearFolder($folderPath . $file, true);
-            //On supprile le dossier une fois vide
-            @rmdir($folderPath . $file);
+function clearFolder($folderPath, $subfolder = false) {
+    //On verifie que c'est un fichier
+    if (is_dir($folderPath)) {
+        //On ajoute un slash a lafin si il n'y en a pas
+        if ($folderPath[strlen($folderPath) - 1] != '/') {
+            $folderPath .= '/';
+        }
+        //Recup tous les fichiers
+        $files = array_diff(scandir($folderPath), array('..', '.'));
+        //Parcours des fichiers
+        foreach ($files as $file) {
+            //Si ce sont des fichiers
+            if (is_file($folderPath . $file)) {
+                unlink($folderPath . $file);
+            }
+            //Sinon ce sont des dossier et supprime seulement si subFolder = true
+            else if ($subfolder) {
+                //On rapelle cette fontion pour vider le dossier
+                clearFolder($folderPath . $file, true);
+                //On supprile le dossier une fois vide
+                @rmdir($folderPath . $file);
+            }
         }
     }
-    
 }
-
 
 /*
  * Create a random string

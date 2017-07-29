@@ -58,9 +58,8 @@ class Affichage_model extends ModelIni {
     public function getContent($table, $page = 0, $limit = 25, $order = "1") {
         //Calcul debut et fin pour la limit
         $debut = $page * $limit;
-        $fin = $debut + $limit;
         //Requete
-        $requete = $this->db->prepare("Select * From " . $table . " Order by " . $order . " limit " . $debut . ", " . $fin);
+        $requete = $this->db->prepare("Select * From " . $table . " Order by " . $order . " limit " . $debut . ", " . $limit);
         $requete->execute();
         $result = $requete->fetchAll();
         if ($result === false) {

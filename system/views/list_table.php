@@ -7,11 +7,11 @@ global $_config;
     <div class="row-fluid">
         <div class="col2"></div>
         <div class="col8">
-            <table class="table">
+            <table class="table" style="margin-bottom: 3em;">
                 <thead>
                     <tr>
                         <th>Nom de la table</th>
-                        <th style="text-align: center;">Nombre de ligne</th>
+                        <th class="mobile-hidden" style="text-align: center;">Nombre de ligne</th>
                         <th style="text-align: center; padding-right: 8em;">Action</th>
                     </tr>
                 </thead>
@@ -21,7 +21,7 @@ global $_config;
                         ?>
                         <tr>
                             <td><?= $name ?></td>
-                            <td style="text-align: center;"><?= $nbLigne ?></td>
+                            <td class="mobile-hidden" style="text-align: center;"><?= $nbLigne ?></td>
                             <td data-name="<?= $name ?>">
                                 <div class="btn-group">
                                     <button class="btn btn-default btn_view_table" title="Contenue de la table"><i class="material-icons">view_list</i></button>

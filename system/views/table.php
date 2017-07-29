@@ -84,8 +84,16 @@ global $_config;
                     <li><span id="prev" class="btn btn-default disabled">«</span></li>
                     <?php
                     for ($i = 1; $i <= $pagine; $i++) {
-                        $active = ($i === 1) ? 'active' : '';
-                        echo '<li><span id="change_page_' . $i . '" class="btn btn-default ' . $active . ' change_page" data-num="' . $i . '">' . $i . '</span></li>';
+                        //Si pagine inferieur a 10
+                        if ($pagine < 10) {
+                            $active = ($i === 1) ? 'active' : '';
+                            echo '<li><span id="change_page_' . $i . '" class="btn btn-default ' . $active . ' change_page" data-num="' . $i . '">' . $i . '</span></li>';
+                        } else if ($i < 4 || $i > $pagine - 3) {
+                            $active = ($i === 1) ? 'active' : '';
+                            echo '<li><span id="change_page_' . $i . '" class="btn btn-default ' . $active . ' change_page" data-num="' . $i . '">' . $i . '</span></li>';
+                        } else if ($i == 4) {
+                            echo '<li><span id="more_page" class="btn btn-default change_page disabled">...</span></li>';
+                        }
                     }
                     ?>
                     <li><span id="next" class="btn btn-default">»</span></li>
@@ -207,6 +215,10 @@ global $_config;
                 $.post('<?= $_config['web_root'] ?>Modification/ajx_delete', params, function (data) {
                     console.log(data);
                 });
+            } else if (action == 'create') {
+
+            } else if (action == 'truncate') {
+
             } else {
                 //Autre => Erreur
 
