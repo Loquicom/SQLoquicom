@@ -19,26 +19,28 @@ class Modification extends ControllerIni {
             exit;
         }
         $pk = $this->model->modif_model->getPrimary($_POST['table']);
+        $i = 0;
         foreach ($_POST['pk-value'] as $val) {
             //On delete chaque ligne envoyer
             $sql = 'Delete From ' . $_POST['table'];
             //On recupere la valeur de toutes les clef primaire
             $val = explode(';', $val);
             //Pour toutes les valeurs
-            $i = 0;
+            $j = 0;
             foreach ($val as $value) {
-                if ($i == 0) {
-                    $sql .= " Where " . $pk[$i] . " = '" . $value . "'";
+                if ($j == 0) {
+                    $sql .= " Where " . $pk[$j] . " = '" . $value . "'";
                 } else {
-                    $sql .= " And " . $pk[$i] . " = '" . $value . "'";
+                    $sql .= " And " . $pk[$j] . " = '" . $value . "'";
                 }
-                $i++;
+                $j++;
             }
             //On delete
             $this->model->modif_model->execute($sql);
-            //Retour
-            echo json_encode(array('etat' => 'ok', 'message' => $i . ' ligne(s) supprimée(s)'));
+            $i++;
         }
+        //Retour
+        echo json_encode(array('etat' => 'ok', 'message' => $i . ' ligne(s) supprimée(s)'));
     }
 
 }

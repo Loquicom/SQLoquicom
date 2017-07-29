@@ -90,19 +90,18 @@ global $_config;
 </div>
 
 <!-- Contenue pour les dialog -->
-<div id="conf_suppr" class="hide">
+<div id="conf_action" class="hide">
     <div class="row-fluid alert a-is-warning">
         <div class="col1">
             <i class="material-icons">warning</i>
         </div>
-        <div class="col11">
-            Voulez vous vraiment supprimer la sélection ?
+        <div class="col11" id="conf_action_text">
         </div>
     </div>
     <div class="row-fluid" style="padding-top: 1em; padding-bottom: 2em;">
         <div class="offset10 col2">
             <span style="padding-right: 1em;"><button class="btn btn-default close-dialog">Annuler</button></span>
-            <button class="btn btn-primary btn_valid_suppr">Valider</button>
+            <button id="conf_btn" class="btn btn-primary">Valider</button>
         </div>
     </div>
 </div>
@@ -147,18 +146,28 @@ global $_config;
         $('.btn_action').on('click', function () {
             var action = $(this).attr('data-action');
             var params = prepare_post('#table_content', {'table': '<?= $nom ?>'});
-            //Au moins une case est cochée
-            if (params.length > 1) {
-                if (action == 'update') {
-                    //Mise à jour des lignes concerner
+            if (action == 'create') {
 
-                } else if (action == 'delete') {
-                    //Ouverture boite de dialogue pour confirmation
-                    dialog($('#conf_suppr').html());
-                } else {
-                    //Autre => Erreur
-                    $('#zone_message').addClass('alert a-is-warning').html('Erreur inconnue');
+            } else if (action == 'update') {
+                //Au moins une case est cochée
+                if (params.length > 1) {
+                    //Mise à jour des lignes concerner
                 }
+            } else if (action == 'delete') {
+                //Au moins une case est cochée
+                if (params.length > 1) {
+                    //Ouverture boite de dialogue pour confirmation
+                    $('#conf_action_text').html('Voulez vous vraiment supprimer la sélection ?');
+                    $('#conf_btn').addClass('btn_valid_suppr');
+                    dialog($('#conf_action').html());
+                }
+            } else if (action == 'truncate') {
+                //Ouverture boite de dialogue pour confirmation
+                $('#conf_action_text').html('Voulez vous vraiment vider la table ?');
+                dialog($('#conf_action').html());
+            } else {
+                //Autre => Erreur
+                $('#zone_message').addClass('alert a-is-warning').html('Erreur inconnue');
             }
         });
 
@@ -183,6 +192,7 @@ global $_config;
                 }
                 //Fermeture de la dialogue
                 dialog();
+                $('#conf_btn').removeClass('btn_valid_suppr');
             }, 'json');
         });
 
