@@ -164,6 +164,7 @@ global $_config;
             } else if (action == 'truncate') {
                 //Ouverture boite de dialogue pour confirmation
                 $('#conf_action_text').html('Voulez vous vraiment vider la table ?');
+                $('#conf_btn').addClass('btn_valid_trunc');
                 dialog($('#conf_action').html());
             } else {
                 //Autre => Erreur
@@ -184,6 +185,29 @@ global $_config;
                         if ($(this).prop('checked')) {
                             $(this).closest('tr').remove();
                         }
+                    });
+                } else if (data.etat == 'err') {
+                    $('#zone_message').addClass('alert a-is-danger').html(data.message);
+                } else {
+                    $('#zone_message').addClass('alert a-is-warning').html('Erreur inconnue');
+                }
+                //Fermeture de la dialogue
+                dialog();
+                $('#conf_btn').removeClass('btn_valid_suppr');
+            }, 'json');
+        });
+
+        //Suppr ligne
+        $('#dialog').on('click', '.btn_valid_trunc', function () {
+            //Suppression des lignes slectionnées
+            var params = prepare_post('#table_content', {'table': '<?= $nom ?>'});
+            $.post('<?= $_config['web_root'] ?>Modification/ajx_truncate', params, function (data) {
+                $('#zone_message').removeClass();
+                if (data.etat == 'ok') {
+                    $('#zone_message').addClass('alert a-is-success').html(data.message);
+                    //Supprime les lignes
+                    $('.line_action').each(function () {
+                        $(this).closest('tr').remove();
                     });
                 } else if (data.etat == 'err') {
                     $('#zone_message').addClass('alert a-is-danger').html(data.message);

@@ -27,6 +27,7 @@ class Modification extends ControllerIni {
             $val = explode(';', $val);
             //Pour toutes les valeurs
             $j = 0;
+            //On parcours toutes les clef primaire
             foreach ($val as $value) {
                 if ($j == 0) {
                     $sql .= " Where " . $pk[$j] . " = '" . $value . "'";
@@ -41,6 +42,16 @@ class Modification extends ControllerIni {
         }
         //Retour
         echo json_encode(array('etat' => 'ok', 'message' => $i . ' ligne(s) supprimée(s)'));
+    }
+    
+    public function ajx_truncate(){
+        if(!isset($_POST['table'])){
+            echo json_encode(array('etat' => 'err', 'message' => 'Parametre incorrect'));
+            exit;
+        }
+        $sql = "Truncate Table " . $_POST['table'];
+        $this->model->modif_model->execute($sql);
+        echo json_encode(array('etat' => 'ok', 'message' => 'Table vidée'));
     }
 
 }
