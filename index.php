@@ -7,14 +7,6 @@ require_once '_ini.php';
 require_once 'system/load.php';
 $_load = Loader::get_loader();
 
-//Si tmp n'existe pas on le créer
-if(!is_dir('system/tmp')){
-    mkdir('system/tmp');
-}
-
-//On vide le dossier tmp
-clearFolder('system/tmp');
-
 //Si on reçoit des parametres en POST on les traites
 if (isset($_POST['host']) && isset($_POST['name']) && isset($_POST['usr']) && isset($_POST['pass'])) {
     $_S['db'] = $_POST;
@@ -49,77 +41,33 @@ if (!isset($_GET['r']) || empty($_GET['r']) || trim($_GET['r']) == '') {
     $_load->load_controller('Affichage');
     $_load->affichage->index();
 } else {
-    //On s'occupe du routage en generant le fichier a appeler et en l'appelant
-    fileRoutage($_GET['r']);
+    //On s'occupe du routage avec le parametre $_GET['r']
+    $path = explode('/', $_GET['r']);
+    //Chargement du controller
+    if ($_load->load_controller($path[0]) === false) {
+        
+    }
+    $path[0] = strtolower($path[0]);
+    //Chargement de la methode
+    $methode = (isset($path[1])) ? $path[1] : 'index';
+    if (!method_exists($_load->$path[0], $methode)) {
+        
+    }
+    //Avec ou sans parametre
+    if (count($path) > 2 && trim($path[2]) != '' && $path[2] != null) {
+        //Avec
+        $params = $path;
+        unset($params[0]);
+        unset($params[1]);
+        call_user_func_array(array($_load->$path[0], $methode), $params);
+    } else {
+        //Sans
+        $_load->$path[0]->$methode();
+    }
 }
 
 
 /* ===== Fonction ===== */
-
-function fileRoutage($path, $errController = 'ErreurC', $errMethod = 'ErreurM') {
-    $path = explode('/', $path);
-    if (count($path) > 0) {
-        //On prepare l'appel de la fonction
-        $name = uniqid(md5(mt_rand(1, 1000000000)), true) . '.php';
-        $file = fopen('system/tmp/' . $name, 'w');
-        $content = "<?php \r\n";
-        $content .= 'global $_load;' . "\r\n";
-        $content .= 'if($_load->' . "load_controller('" . $path[0] . "') === false){exit('" . $errController . "');} \r\n";
-        $content .= 'if(!method_exists($_load->' . strtolower($path[0]) . ', "' . ((isset($path[1]) && trim($path[1]) != '') ? $path[1] : 'index') . '")){exit("' . $errMethod . '");}' . "\r\n";
-        $content .= '@$_load->' . strtolower($path[0]) . "->" . ((isset($path[1]) && trim($path[1]) != '') ? $path[1] : 'index') . '(';
-        //Si il y a des parametres
-        $var = '';
-        if (count($path) > 2 && trim($path[2]) != '') {
-            for ($i = 2; $i < count($path); $i++) {
-                $varName = randomString();
-                $$varName = $path[$i];
-                $var .= '$' . $varName . ',';
-            }
-            $var = rtrim($var, ",");
-        }
-        $content .= $var . ');';
-        //Ecriture
-        fwrite($file, $content);
-        //Fermeture
-        fclose($file);
-        try {
-            //On require le fichier qui va appeler la fonction
-            require 'system/tmp/' . $name;
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-        //Suppr du fichier
-        unlink('system/tmp/' . $name);
-    } else {
-        
-    }
-}
-
-function clearFolder($folderPath, $subfolder = false) {
-    //On verifie que c'est un fichier
-    if (is_dir($folderPath)) {
-        //On ajoute un slash a lafin si il n'y en a pas
-        if ($folderPath[strlen($folderPath) - 1] != '/') {
-            $folderPath .= '/';
-        }
-        //Recup tous les fichiers
-        $files = array_diff(scandir($folderPath), array('..', '.'));
-        //Parcours des fichiers
-        foreach ($files as $file) {
-            //Si ce sont des fichiers
-            if (is_file($folderPath . $file)) {
-                unlink($folderPath . $file);
-            }
-            //Sinon ce sont des dossier et supprime seulement si subFolder = true
-            else if ($subfolder) {
-                //On rapelle cette fontion pour vider le dossier
-                clearFolder($folderPath . $file, true);
-                //On supprile le dossier une fois vide
-                @rmdir($folderPath . $file);
-            }
-        }
-    }
-}
 
 /*
  * Create a random string
