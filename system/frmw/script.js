@@ -37,9 +37,9 @@ $(document).ready(function () {
             _change_page_pagine(_paginePageActuel + 1);
         }
     });
-    
+
     //Dialog
-    $('#dialog').on('click', '.close-dialog', function(){
+    $('#dialog').on('click', '.close-dialog', function () {
         dialog();
     });
 
@@ -72,7 +72,12 @@ function pagine(nbPage, element, callback = function(page) {}) {
         html += '<li><span id="pagine_page_' + (nbPage - 1) + '" class="btn btn-default pagine-num" data-num="' + (nbPage - 1) + '">' + (nbPage - 1) + '</span></li>';
         html += '<li><span id="pagine_page_' + (nbPage) + '" class="btn btn-default pagine-num" data-num="' + (nbPage) + '">' + (nbPage) + '</span></li>';
     }
-    html += '<li><span id="pagine-next" class="btn btn-default">»</span></li></ul>';
+    //Si il y a qu'une page on disable aussi le next
+    if (nbPage == 1) {
+        html += '<li><span id="pagine-next" class="btn btn-default disabled">»</span></li></ul>';
+    } else {
+        html += '<li><span id="pagine-next" class="btn btn-default">»</span></li></ul>';
+    }
     $('#' + element).html(html);
 }
 
@@ -125,13 +130,15 @@ function _change_page_pagine(newPage) {
         //Insertion de l'html
         $(_pagineElement).html(html);
         //Ajout de la class active
-        $('#pagine_page_'+ newPage).addClass('active');
+        $('#pagine_page_' + newPage).addClass('active');
         //Mise ajour du pagine actuel
         _paginePageActuel = newPage;
     }
     //si on est sur la 1er on derniere page on disabled les bon btn
-    console.log(newPage);
-    if (newPage == 1) {
+    if (_pagineNbPage == 1) {
+        $('#pagine-prev').addClass('disabled');
+        $('#pagine-next').addClass('disabled');
+    } else if (newPage == 1) {
         $('#pagine-prev').addClass('disabled');
         $('#pagine-next').removeClass('disabled');
     } else if (newPage == _pagineNbPage) {
@@ -144,16 +151,16 @@ function _change_page_pagine(newPage) {
     _pagineCallback(newPage);
 }
 
-function dialog(content = ''){
+function dialog(content = '') {
     content = '' + content;
-    if(content.trim() != ''){
+    if (content.trim() != '') {
         $('#dialog').css('height', $(document).height() + 'px');
         $('#dialog_content').html(content);
         $('#dialog').removeClass('hide');
     } else {
         $('#dialog').addClass('hide');
         $('#dialog_content').html('');
-    }
+}
 }
 
 function animate(jqueryId, animType, callBack = function() {$(this).removeClass(); }) {
