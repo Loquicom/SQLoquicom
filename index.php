@@ -45,13 +45,13 @@ if (!isset($_GET['r']) || empty($_GET['r']) || trim($_GET['r']) == '') {
     $path = explode('/', $_GET['r']);
     //Chargement du controller
     if ($_load->load_controller($path[0]) === false) {
-        
+        exit('Erreur Controller inconnue');
     }
     $path[0] = strtolower($path[0]);
     //Chargement de la methode
     $methode = (isset($path[1])) ? $path[1] : 'index';
     if (!method_exists($_load->$path[0], $methode)) {
-        
+        exit('Erreur Méthode inconnue');
     }
     //Avec ou sans parametre
     if (count($path) > 2 && trim($path[2]) != '' && $path[2] != null) {
