@@ -43,7 +43,7 @@ global $_config;
         <div class="col12">
             <span class="btn-label warning">Boutons d'actions</span><br>
             <div class="btn-group">
-                <button class="btn btn-warning btn_action" data-action="create" title="ajouter"><i class="material-icons">playlist_add</i></button>
+                <button class="btn btn-warning btn_action" data-action="insert" title="insérer"><i class="material-icons">playlist_add</i></button>
                 <button class="btn btn-warning btn_action" data-action="update" title="modifier"><i class="material-icons">description</i></button>
                 <button class="btn btn-warning btn_action" data-action="delete" title="supprimer"><i class="material-icons">delete_forever</i></button>
                 <button class="btn btn-warning btn_action" data-action="truncate" title="vider"><i class="material-icons">restore_page</i></button>
@@ -146,12 +146,16 @@ global $_config;
         $('.btn_action').on('click', function () {
             var action = $(this).attr('data-action');
             var params = prepare_post('#table_content', {'table': '<?= $nom ?>'});
-            if (action == 'create') {
-
+            if (action == 'insert') {
+                //Ajout de ligne
+                var params = prepare_post('#table_content', {'table': '<?= $nom ?>'});
+                $.redirectPost('<?= $_config['web_root'] ?>Modification/insert', params);
             } else if (action == 'update') {
                 //Au moins une case est cochée
                 if (params.length > 1) {
                     //Mise à jour des lignes concerner
+                    var params = prepare_post('#table_content', {'table': '<?= $nom ?>'});
+                    $.redirectPost('<?= $_config['web_root'] ?>Modification/update', params);
                 }
             } else if (action == 'delete') {
                 //Au moins une case est cochée
