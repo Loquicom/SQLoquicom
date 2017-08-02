@@ -35,7 +35,7 @@ global $_config;
             <div class="container">
                 <div class="row-fluid">
                     <div class="brand">
-                        <a href="#">SQLoquicom</a>
+                        <a href="<?=$_config['web_root']?>">SQLoquicom</a>
                     </div>
                     <?php if ($_db !== null && $_db !== false) { ?>
                         <nav class="right-float mobile-hidden">
