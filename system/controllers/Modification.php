@@ -7,10 +7,16 @@ class Modification extends ControllerIni {
     public function __construct() {
         parent::__construct();
         $this->load->load_model('Modif_model');
+        $this->load->load_model('Affichage_model');
     }
 
-    public function ajx_update() {
+    public function insert() {
         
+    }
+
+    public function update() {
+        $page = $this->load->load_view('update', array('table' => $_POST['table']), true);
+        $this->load->load_view('webpage', array('body' => $page));
     }
 
     public function ajx_delete() {
@@ -43,9 +49,9 @@ class Modification extends ControllerIni {
         //Retour
         echo json_encode(array('etat' => 'ok', 'message' => $i . ' ligne(s) supprimée(s)'));
     }
-    
-    public function ajx_truncate(){
-        if(!isset($_POST['table'])){
+
+    public function ajx_truncate() {
+        if (!isset($_POST['table'])) {
             echo json_encode(array('etat' => 'err', 'message' => 'Parametre incorrect'));
             exit;
         }
