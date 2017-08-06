@@ -26,6 +26,7 @@ class Connexion extends ControllerIni {
         }
 
         //Recup de la liste des fichiers des bd sauvegarder
+        $files = null;
         if (file_exists('data/db/')) {
             $files = array_diff(scandir('data/db'), array('..', '.', '.htaccess'));
             //On verifie que les fichiers ne sont pas modifié

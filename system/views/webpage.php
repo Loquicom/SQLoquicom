@@ -39,10 +39,10 @@ global $_pref;
                     </div>
                     <?php if ($_db !== null && $_db !== false) { ?>
                         <nav class="right-float mobile-hidden">
-                            <a class="text-color" href="<?= $_config['web_root'] ?>Affichage" class="btn-pill">Tables</a>
-                            <a class="text-color" href="#" class="btn-pill">Requeteur SQL</a>
-                            <a class="text-color" href="<?= $_config['web_root'] ?>Parametre" class="btn-pill">Param&egrave;tre</a>
-                            <a class="text-color" href="<?= $_config['web_root'] ?>Connexion/deco" class="btn-pill">Déconnexion</a>
+                            <a class="text-color btn-pill" href="<?= $_config['web_root'] ?>Affichage">Tables</a>
+                            <a class="text-color btn-pill" href="#">Requeteur SQL</a>
+                            <a class="text-color btn-pill" href="<?= $_config['web_root'] ?>Parametre">Param&egrave;tre</a>
+                            <a class="text-color btn-pill" href="<?= $_config['web_root'] ?>Connexion/deco">Déconnexion</a>
                         </nav>
                         <div class="nav-toogle right-float show-mobile">
                             <i class="material-icons btn-mobile-nav">menu</i>
