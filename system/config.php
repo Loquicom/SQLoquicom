@@ -13,8 +13,9 @@
  */
 $_config['mode'] = 'dev';
 
-
+/* Decommenter pour forcer les valeurs dans ce fichier
 $_config['root'] = '/SQLoquicom/';
 
 
 $_config['web_root'] = 'http://localhost/SQLoquicom/';
+//*/

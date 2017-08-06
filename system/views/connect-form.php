@@ -36,7 +36,7 @@
                 </label>
             </div>
             <div class="center">
-                <button type="submit" class="btn btn-primary">Connexion</button>
+                <button type="submit" class="btn btn-primary main-color text-color">Connexion</button>
             </div>
         </form>
     </div>

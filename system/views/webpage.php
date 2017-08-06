@@ -11,6 +11,7 @@ global $_config;
         <link type="text/css" rel="stylesheet" href="<?=$_config['web_root']?>system/frmw/schemaUI.css"/>
         <link type="text/css" rel="stylesheet" href="<?=$_config['web_root']?>system/frmw/animate.css"/>
         <link type="text/css" rel="stylesheet" href="<?=$_config['web_root']?>system/frmw/style.css"/>
+        <link type="text/css" rel="stylesheet" href="<?=$_config['web_root']?>data/pref.css"/>
         <!--Import jQuery and js-->
         <script type="text/javascript" src="<?=$_config['web_root']?>system/frmw/jquery.min.js"></script>
         <script type="text/javascript" src="<?=$_config['web_root']?>system/frmw/schemaUI.js"></script>
@@ -29,18 +30,18 @@ global $_config;
         </style>
 
         <!-- Menu -->
-        <header class="nav">
+        <header class="nav main-color">
             <div class="container">
                 <div class="row-fluid">
-                    <div class="brand">
-                        <a href="<?=$_config['web_root']?>">SQLoquicom</a>
+                    <div class="brand title">
+                        <a class="text-color" href="<?=$_config['web_root']?>">SQLoquicom</a>
                     </div>
                     <?php if ($_db !== null && $_db !== false) { ?>
                         <nav class="right-float mobile-hidden">
-                            <a href="<?=$_config['web_root']?>Affichage" class="btn-pill">Tables</a>
-                            <a href="#" class="btn-pill">Requeteur SQL</a>
-                            <a href="#" class="btn-pill">Param&egrave;tre</a>
-                            <a href="<?=$_config['web_root']?>Connexion/deco" class="btn-pill">Déconnexion</a>
+                            <a class="text-color" href="<?=$_config['web_root']?>Affichage" class="btn-pill">Tables</a>
+                            <a class="text-color" href="#" class="btn-pill">Requeteur SQL</a>
+                            <a class="text-color" href="#" class="btn-pill">Param&egrave;tre</a>
+                            <a class="text-color" href="<?=$_config['web_root']?>Connexion/deco" class="btn-pill">Déconnexion</a>
                         </nav>
                         <div class="nav-toogle right-float show-mobile">
                             <i class="material-icons btn-mobile-nav">menu</i>

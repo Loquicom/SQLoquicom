@@ -41,12 +41,12 @@ global $_config;
     </div>
     <div class="row-fluid">
         <div class="col12">
-            <span class="btn-label warning">Boutons d'actions</span><br>
+            <span class="btn-label main-color text-color">Boutons d'actions</span><br>
             <div class="btn-group">
-                <button class="btn btn-warning btn_action" data-action="insert" title="insérer"><i class="material-icons">playlist_add</i></button>
-                <button class="btn btn-warning btn_action" data-action="update" title="modifier"><i class="material-icons">description</i></button>
-                <button class="btn btn-warning btn_action" data-action="delete" title="supprimer"><i class="material-icons">delete_forever</i></button>
-                <button class="btn btn-warning btn_action" data-action="truncate" title="vider"><i class="material-icons">restore_page</i></button>
+                <button class="btn btn-default btn_action main-color text-color" data-action="insert" title="insérer"><i class="material-icons">playlist_add</i></button>
+                <button class="btn btn-default btn_action main-color text-color" data-action="update" title="modifier"><i class="material-icons">description</i></button>
+                <button class="btn btn-default btn_action main-color text-color" data-action="delete" title="supprimer"><i class="material-icons">delete_forever</i></button>
+                <button class="btn btn-default btn_action main-color text-color" data-action="truncate" title="vider"><i class="material-icons">restore_page</i></button>
             </div>
         </div>
     </div>
