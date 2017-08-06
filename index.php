@@ -12,7 +12,7 @@ if (isset($_POST['host']) && isset($_POST['name']) && isset($_POST['usr']) && is
     $_S['db'] = $_POST;
     //Si keep est present on sauvegarde les données dans un fichier dans data
     if (isset($_POST['keep'])) {
-        
+        saveDatabase($_POST['host'], $_POST['name'], $_POST['usr'], $_POST['pass'], true);
     }
 }
 //Connxion à la BD
@@ -85,4 +85,30 @@ function randomString($length = 10) {
         $str .= $characters[$rand];
     }
     return $str;
+}
+
+function saveDatabase($host, $name, $usr, $pass, $rewrite = false){
+    //Création du dossier de sauvegarde si il n'existe pas
+    if(!file_exists('data/db/')){
+        mkdir('./data/db/');
+        //Création de l'htaccess
+        $htaccess = fopen('data/db/.htaccess', 'w');
+        fwrite($htaccess, 'Deny from all');
+        fclose($htaccess);
+    }
+    //Création du fichier si il n'existe pas deja ou qu'il existe et que le reécrit
+    if(!file_exists('data/db/' . $host . '_' . $name . '.dat') || (file_exists('data/db/' . $host . '_' . $name . '.dat') && $rewrite)){
+        $data = fopen('data/db/' . $host . '_' . $name . '.dat', 'w');
+        $content = md5($host . '_' . $name) . "\r\n";
+        $content .= $host . "\r\n";
+        $content .= $name . "\r\n";
+        $content .= $usr . "\r\n";
+        $content .= $pass;
+        $content = base64_encode($content);
+        $content .= "\r\n" . md5($content);
+        fwrite($data, $content);
+        fclose($data);
+        return true;
+    }
+    return false;
 }

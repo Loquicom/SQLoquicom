@@ -8,6 +8,7 @@ global $_config;
 global $_db;
 global $_err;
 global $_load;
+global $_pref;
 
 
 //Demarre la session si besoin
@@ -43,6 +44,8 @@ if ($_config['mode'] == 'dev') {
 
 //Création des fichiers avec les preferences
 setLocalPref();
+//Chargemenr
+@include 'data/pref.php';
 
 /* ===== Fonction ===== */
 
@@ -53,6 +56,9 @@ function setLocalConfig() {
         //On créer le dossier si besoin
         if (!file_exists('data/')) {
             mkdir('./data/');
+            $index = fopen('data/index.html', 'w');
+            fwrite($index, '<h1>Forbidden</h1>');
+            fclose($index);
         }
         //Création du fichier de config
         $localConfig = fopen('data/local_config.php', 'w');
@@ -81,16 +87,36 @@ function setLocalConfig() {
     return false;
 }
 
-function setLocalPref($color = '#ffc107', $text = '#000000') {
-    /* --- CSS zvec la couleur principal --- */
-    //Si le fichier n'xiste pas
-    if (!file_exists('data/pref.css')) {
+function setLocalPref($color = '#ffc107', $text = '#000000', $title = 'SQLoquicom', $ifNotExist = true) {
+    //Si les variables sont vide on met leur valeur par default
+    if (!(is_string($color) && trim($color) != '')) {
+        $color = '#ffc107';
+    }
+    if (!(is_string($text) && trim($text) != '')) {
+        $text = '#000000';
+    }
+    if (!(is_string($title) && trim($title) != '')) {
+        $title = 'SQLoquicom';
+    }
+    //Variable indiquant si on execute ou pas
+    $exec = true;
+    if ($ifNotExist) {
+        //Si on execute uniquement quand il n'existz pas on verifier que les deux fichier sont créer pour desactivier l'execution
+        if (file_exists('data/pref.css') && file_exists('data/pref.php')) {
+            $exec = false;
+        }
+    }
+    if ($exec) {
+        /* --- CSS zvec la couleur principal --- */
         //On créer le dossier si besoin
         if (!file_exists('data/')) {
             mkdir('./data/');
+            $index = fopen('data/index.html', 'w');
+            fwrite($index, '<h1>Forbidden</h1>');
+            fclose($index);
         }
         //Creation du fichier
-        $pref = fopen('data/pref.css', 'w');
+        $prefCss = fopen('data/pref.css', 'w');
         //CSS
         list($r, $g, $b) = sscanf($color, "#%02x%02x%02x");
         $css = '.main-color{background-color: ' . $color . ' !important;}' . "\r\n";
@@ -111,7 +137,15 @@ function setLocalPref($color = '#ffc107', $text = '#000000') {
         $css .= '.title>a:hover{' . "\r\n";
         $css .= '   color: ' . $text . ' !important;' . "\r\n";
         $css .= '}' . "\r\n";
-        fwrite($pref, $css);
+        fwrite($prefCss, $css);
+        fclose($prefCss);
+        /* --- Preference d'affichage --- */
+        $pref = fopen('data/pref.php', 'w');
+        $php = '<?php' . "\r\n";
+        $php .= '$_pref[\'title\'] = "' . $title . '";' . "\r\n";
+        $php .= '$_pref[\'color\'] = "' . $color . '";' . "\r\n";
+        $php .= '$_pref[\'text\'] = "' . $text . '";' . "\r\n";
+        fwrite($pref, $php);
         fclose($pref);
         return true;
     }

@@ -21,11 +21,11 @@ global $_config;
                         ?>
                         <tr>
                             <td><?= $name ?></td>
-                            <td class="mobile-hidden" style="text-align: center;"><?= $nbLigne ?></td>
-                            <td data-name="<?= $name ?>" style="text-align: center;">
+                            <td class="mobile-hidden center"><?= $nbLigne ?></td>
+                            <td data-name="<?= $name ?>">
                                 <div class="btn-group">
-                                    <button class="btn btn-default btn_view_table" title="Contenue de la table"><i class="material-icons">view_list</i></button>
-                                    <button class="btn btn-default brn_suppr_table" title="Supprimer la table"><i class="material-icons">delete_forever</i></button>
+                                    <button class="btn btn-default btn_view_table text-color" title="Contenue de la table"><i class="material-icons">view_list</i></button>
+                                    <button class="btn btn-default brn_suppr_table text-color" title="Supprimer la table"><i class="material-icons">delete_forever</i></button>
                                 </div>
                             </td>
                         </tr>
