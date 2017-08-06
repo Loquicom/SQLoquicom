@@ -47,6 +47,7 @@ setLocalPref();
 /* ===== Fonction ===== */
 
 function setLocalConfig() {
+    $noModif = true;
     //Si le fichier local_config n'existe pas
     if (!file_exists('data/local_config.php')) {
         //On créer le dossier si besoin
@@ -61,13 +62,11 @@ function setLocalConfig() {
         $code .= '$_config[\'web_root\'] = "' . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '";' . "\r\n";
         fwrite($localConfig, $code);
         fclose($localConfig);
-        //Si il y a deja htacces
-        if (file_exists('./.htaccess')) {
-            return true;
-        }
+        //On indique que l'on modifié config
+        $noModif = false;
     }
-    //Si le fichier .htaccess n'existe pas
-    if (!file_exists('.htaccess')) {
+    //Si le fichier .htaccess n'existe pas ou si config a été modifié
+    if (!file_exists('./.htaccess') && $noModif) {
         //Ecriture de l'htacces
         $htaccess = fopen('./.htaccess', 'w');
         $code = 'Options +FollowSymLinks' . "\r\n\r\n";

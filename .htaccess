@@ -4,6 +4,6 @@ RewriteEngine On
 
 RewriteBase /
 
-RewriteCond $1 !^(index\.php|robots\.txt|system/frmw)
+RewriteCond $1 !^(index\.php|robots\.txt|system/frmw|data)
 
 RewriteRule ^(.*)$ SQLoquicom/index.php?r=$1 [L]
