@@ -116,10 +116,12 @@ global $_config;
                     <div class="pick"><i class="material-icons">navigate_next</i></div>
                 </div>
             </div>
-            <div class="col10">
+            <div class="col3">
+                <input type="text" name="color-theme" id="color-theme" class="form-element" value="<?= $_pref['color']; ?>" style="margin-top: 4em;">
+            </div>
+            <div class="col7">
                 <div class="form-element" id="preview-theme" style="height: 56px; margin-top: 3.5em; background-color: <?= $_pref['color'] ?>;"></div>
             </div>
-            <input type="hidden" name="color-theme" id="color-theme" value="<?= $_pref['color']; ?>">
         </div>
         <div class="row" style="margin-top: 2em;">
             <div class="col12">
@@ -137,10 +139,12 @@ global $_config;
                     <div class="pick"><i class="material-icons" style="color: #424242;">navigate_next</i></div>
                 </div>
             </div>
-            <div class="col10">
+            <div class="col3">
+                <input type="text" name="color-text" id="color-text" class="form-element" value="<?= $_pref['text']; ?>" style="margin-top: 4em;">
+            </div>
+            <div class="col7">
                 <div class="form-element" id="preview-text" style="height: 56px; margin-top: 3.5em; background-color: <?= $_pref['text'] ?>;"></div>
             </div>
-            <input type="hidden" name="color-text" id="color-text" value="<?= $_pref['text']; ?>">
         </div>
         <div class="row" style="margin-top: 2em;">
             <div class="col12">
@@ -286,6 +290,22 @@ global $_config;
     $(document).ready(function () {
         //Active les color pickers
         $('.pick').click();
+
+        //Change couleur dans le champ
+        $('#color-text').on('change', function () {
+            var val = $(this).val();
+            if (val.substr(0, 3) == 'rgb') {
+                val = rgb2hex(val);
+            }
+            $('#preview-text').css('background', val);
+        });
+        $('#color-theme').on('change', function () {
+            var val = $(this).val();
+            if (val.substr(0, 3) == 'rgb') {
+                val = rgb2hex(val);
+            }
+            $('#preview-theme').css('background', $(this).val());
+        });
 
         //Envoie formulaire
         $('#btn_submit').on('click', function () {
