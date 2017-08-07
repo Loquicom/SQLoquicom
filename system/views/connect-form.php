@@ -38,8 +38,8 @@ global $_config;
                         <option value="0" id="default_val" selected>S&eacute;lectionnez une base</option>
                         <?php
                         foreach ($db as $base) {
-                            $host = explode("_", $base)[0];
-                            $name = str_replace('.dat', '', explode("_", $base)[1]);
+                            $host = explode("(-)", $base)[0];
+                            $name = str_replace('.dat', '', explode("(-)", $base)[1]);
                             echo '<option value="' . $base . '">' . $host . ' : ' . $name . '</option>';
                         }
                         ?>

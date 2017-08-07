@@ -177,8 +177,8 @@ global $_config;
                         echo '<tr><td colspan="4"><div class="alert a-is-info"><i class="material-icons">info</i>Aucune base de donn&eacute;es sauvegard&eacute;es</div></td></tr>';
                     } else {
                         foreach ($bd as $base) {
-                            $hote = explode('_', $base)[0];
-                            $nom = str_replace('.dat', '', explode('_', $base)[1]);
+                            $hote = explode('(-)', $base)[0];
+                            $nom = str_replace('.dat', '', explode('(-)', $base)[1]);
                             ?>
                             <tr class="line">
                                 <td><?= $hote ?></td>

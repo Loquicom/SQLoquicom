@@ -97,9 +97,9 @@ function saveDatabase($host, $name, $usr, $pass, $rewrite = false){
         fclose($htaccess);
     }
     //Création du fichier si il n'existe pas deja ou qu'il existe et que le reécrit
-    if(!file_exists('data/db/' . $host . '_' . $name . '.dat') || (file_exists('data/db/' . $host . '_' . $name . '.dat') && $rewrite)){
-        $data = fopen('data/db/' . $host . '_' . $name . '.dat', 'w');
-        $content = md5($host . '_' . $name) . "\r\n";
+    if(!file_exists('data/db/' . $host . '(-)' . $name . '.dat') || (file_exists('data/db/' . $host . '(-)' . $name . '.dat') && $rewrite)){
+        $data = fopen('data/db/' . $host . '(-)' . $name . '.dat', 'w');
+        $content = md5($host . '(-)' . $name) . "\r\n";
         $content .= $host . "\r\n";
         $content .= $name . "\r\n";
         $content .= $usr . "\r\n";
