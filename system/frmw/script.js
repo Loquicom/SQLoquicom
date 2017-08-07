@@ -73,7 +73,7 @@ function pagine(nbPage, element, callback = function(page) {}) {
         html += '<li><span id="pagine_page_' + (nbPage) + '" class="btn btn-default pagine-num" data-num="' + (nbPage) + '">' + (nbPage) + '</span></li>';
     }
     //Si il y a qu'une page on disable aussi le next
-    if (nbPage == 1) {
+    if (nbPage <= 1) {
         html += '<li><span id="pagine-next" class="btn btn-default disabled">»</span></li></ul>';
     } else {
         html += '<li><span id="pagine-next" class="btn btn-default">»</span></li></ul>';
