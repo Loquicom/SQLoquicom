@@ -24,8 +24,8 @@ global $_config;
                             <td class="mobile-hidden center"><?= $nbLigne ?></td>
                             <td data-name="<?= $name ?>">
                                 <div class="btn-group">
-                                    <button class="btn btn-default btn_view_table text-color" title="Contenue de la table"><i class="material-icons">view_list</i></button>
-                                    <button class="btn btn-default brn_suppr_table text-color" title="Supprimer la table"><i class="material-icons">delete_forever</i></button>
+                                    <button class="btn btn-default btn_view_table main-color text-color" title="Contenue de la table"><i class="material-icons">view_list</i></button>
+                                    <button class="btn btn-default brn_suppr_table main-color text-color" title="Supprimer la table"><i class="material-icons">delete_forever</i></button>
                                 </div>
                             </td>
                         </tr>
