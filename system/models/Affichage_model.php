@@ -55,11 +55,20 @@ class Affichage_model extends ModelIni {
         return $result['count(*)'];
     }
 
-    public function getContent($table, $page = 0, $limit = 25, $order = "1") {
+    public function getContent($table, $page = 0, $search = "", $limit = 25, $order = "1") {
         //Calcul debut et fin pour la limit
         $debut = $page * $limit;
+        //Si la recherche n'est pas vide
+        if(trim($search) != ''){
+            $col = $this->getColumn($table);
+            $sql = "Where 1=0";
+            foreach ($col['list'] as $nom){
+                $sql .= " Or $nom like '$search%'";
+            }
+            $search = $sql;
+        }
         //Requete
-        $requete = $this->db->prepare("Select * From " . $table . " Order by " . $order . " limit " . $debut . ", " . $limit);
+        $requete = $this->db->prepare("Select * From " . $table . " " . $search . " Order by " . $order . " limit " . $debut . ", " . $limit);
         $requete->execute();
         $result = $requete->fetchAll();
         if ($result === false) {

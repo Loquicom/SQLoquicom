@@ -40,7 +40,7 @@ global $_config;
         </div>
     </div>
     <div class="row-fluid">
-        <div class="col12">
+        <div class="col8">
             <span class="btn-label main-color text-color">Boutons d'actions</span><br>
             <div class="btn-group">
                 <button class="btn btn-default btn_action main-color text-color" data-action="insert" title="insérer"><i class="material-icons">playlist_add</i></button>
@@ -48,6 +48,10 @@ global $_config;
                 <button class="btn btn-default btn_action main-color text-color" data-action="delete" title="supprimer"><i class="material-icons">delete_forever</i></button>
                 <button class="btn btn-default btn_action main-color text-color" data-action="truncate" title="vider"><i class="material-icons">restore_page</i></button>
             </div>
+        </div>
+        <div class="col4" style="text-align: right;">
+            <span class="btn-label main-color text-color">Recherche</span><br>
+            <input type="text" id="search" class="form-element">
         </div>
     </div>
     <div class="row-fluid">
@@ -121,19 +125,29 @@ global $_config;
                 'pagine',
                 function (page) {
                     pageActuel = page;
-                    updateTab(page);
+                    updateTab(page, $('#search').val());
                 });
 
         //Modifie le trie dans le tableau
-        $('.sort_table').on('click', function(){
+        $('.sort_table').on('click', function () {
             var col = $(this).attr('data-col');
             //Si on est deja sur cette colonne on change l'ordre
-            if(order == col){
+            if (order == col) {
                 order = col + ' desc';
             } else {
                 order = col;
             }
-            updateTab(pageActuel);
+            updateTab(pageActuel, $('#search').val());
+        });
+
+        //Recherche
+        $('#search').on('change', function () {
+            if($(this).val().trim() != ''){
+                $('#pagine').hide();
+            } else {
+                $('#pagine').show();
+            }
+            updateTab(pageActuel, $(this).val());
         });
 
         //Si la limite change
@@ -244,10 +258,11 @@ global $_config;
 
     });
 
-    function updateTab(page = 1, limit = <?= $limit ?>) {
+    function updateTab(page = 1, search = '', limit = <?= $limit ?>) {
         var params = [];
         params.push({'name': 'table', 'value': '<?= $nom ?>'});
         params.push({'name': 'page', 'value': page});
+        params.push({'name': 'search', 'value': search});
         params.push({'name': 'limit', 'value': limit});
         params.push({'name': 'order', 'value': order});
         $('.pk').each(function () {

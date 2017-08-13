@@ -34,7 +34,7 @@ class Affichage extends ControllerIni {
             exit('<tr><td colspan="100%" style="text-align: center;"><h3>Données incorrect</h3></td></tr>');
         }
         //On recupére les données
-        $lines = $this->model->affichage_model->getContent($_POST['table'], $_POST['page'] - 1, (isset($_POST['limit'])) ? $_POST['limit'] : 25, (isset($_POST['order'])) ? $_POST['order'] : 1);
+        $lines = $this->model->affichage_model->getContent($_POST['table'], $_POST['page'] - 1, (isset($_POST['search'])) ? $_POST['search'] : "", (isset($_POST['limit'])) ? $_POST['limit'] : 25, (isset($_POST['order'])) ? $_POST['order'] : 1);
         if ($lines === null || empty($lines)) {
             exit('<tr><td colspan="100%" style="text-align: center;"><h3>Table vide</h3></td></tr>');
         }
