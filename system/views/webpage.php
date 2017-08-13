@@ -66,7 +66,7 @@ global $_pref;
             </div>
         </header>
 
-        <main>
+        <main class="container">
             <?= $body ?>
         </main>
         

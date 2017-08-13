@@ -4,7 +4,7 @@
 
 class Connexion extends ControllerIni {
 
-    public function index() {
+    public function index($err = '') {
         //Si on reçoit un post pour recup les infos de la base
         if (isset($_POST['db'])) {
             //Lecture des infos du fichier
@@ -45,7 +45,7 @@ class Connexion extends ControllerIni {
                 $files = null;
             }
         }
-        $page = $this->load->load_view('connect-form', array('db' => $files), true);
+        $page = $this->load->load_view('connect-form', array('db' => $files, 'err' => $err), true);
         $this->load->load_view('webpage', array('body' => $page));
     }
 

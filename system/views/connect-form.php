@@ -11,7 +11,16 @@ global $_config;
     <button type="submit">Connexion</button>
 </form-->
 
-<div class="container">
+<?php if (trim($err) != '') { ?>
+    <div class="row-fluid alert a-is-danger" id="return_zone" style="margin-top: 1em; margin-bottom: 2em;">
+        <i class="material-icons">info</i>
+        <div class="col2"></div>
+        <div class="col8" id="return_text">
+            <?= $err ?>
+        </div>
+    </div>
+<?php } ?>
+<div class="row-fluid" style="margin-top: 2em;">
     <div class="col2"></div>
     <div class="col8">
         <form name="connect" method="POST">

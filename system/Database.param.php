@@ -11,8 +11,12 @@ $_db = false;
 if (isset($_S['db']['host']) && trim($_S['db']['host']) != '' && isset($_S['db']['name']) && trim($_S['db']['name']) != '' && isset($_S['db']['usr']) && trim($_S['db']['usr']) != '' && isset($_S['db']['pass'])) {
     try {
         Database::setConfiguration('mysql:host=' . $_S['db']['host'] . ';dbname=' . $_S['db']['name'] . ';charset=utf8', $_S['db']['usr'], $_S['db']['pass']);
-        $_db = Database::getInstance();
-    } catch (Exception $e) {
-        $_err = ($e->getMessage());
+        $_db = @Database::getInstance();
+    } catch (Exception $ex) {
+        //On s'assure que la db n'est pas set
+        $_db = false;
+        unset($_S['db']);
+        //On redirige avec le message d'erreur
+        $_err = utf8_encode($ex->getMessage());
     }
 }
