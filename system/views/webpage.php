@@ -19,6 +19,8 @@ global $_pref;
         <script type="text/javascript" src="<?= $_config['web_root'] ?>system/frmw/script.js"></script>
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!-- Icone -->
+        <link rel="shortcut icon" href="<?= $_config['web_root'] ?>system/frmw/favicon.ico" type="image/x-icon" >
 
         <!-- Ajouter titre, desc, ... depuis le fichier de config -->
     </head>
@@ -69,7 +71,16 @@ global $_pref;
         </main>
         
         <footer class="center" style="color: #bdbdbd">
-            SQLoquicom &COPY; <?= date('Y') ?> Loquicom [<a href="http://loquicom.fr" target="_blank" style="color: #bdbdbd">loquicom.fr</a>]
+            <div class="row-fluid">
+                <div class="col12">
+                    <img src="<?= $_config['web_root'] ?>system/frmw/SQLoquicom-logo.svg" alt="SQLoquicom logo" width="30" height="30">
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="col12">
+                    SQLoquicom &COPY; <?= date('Y') ?> Loquicom [<a href="http://loquicom.fr" target="_blank" style="color: #bdbdbd">loquicom.fr</a>]
+                </div>
+            </div>       
         </footer>
         
         <div id="dialog" class="dialog_bck hide">
