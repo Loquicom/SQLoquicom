@@ -62,9 +62,10 @@ global $_config;
                         foreach ($column as $col) {
                             //Si c'est une clef primaire
                             if (in_array($col, $pk)) {
-                                $col = '<div style="position: relative;">' . $col . '<i class="material-icons" style="position: absolute; top:-10px;">vpn_key</i></div>';
+                                echo '<th class="sort_table pointer" data-col="' . $col . '"><div style="position: relative;">' . $col . '<i class="material-icons" style="position: absolute; top:-10px;">vpn_key</i></div></th>';
+                            } else {
+                                echo '<th class="sort_table pointer" data-col="' . $col . '">' . $col . '</th>';
                             }
-                            echo '<th class="sort_table">' . $col . '</th>';
                         }
                         ?>
                     </tr>
@@ -107,6 +108,10 @@ global $_config;
 </div>
 
 <script type="text/javascript">
+    //L'order by et la page
+    var order = '1';
+    var pageActuel = '1';
+
     $(document).ready(function () {
 
         //Chargement des données
@@ -115,8 +120,21 @@ global $_config;
         pagine(<?= $pagine; ?>,
                 'pagine',
                 function (page) {
+                    pageActuel = page;
                     updateTab(page);
                 });
+
+        //Modifie le trie dans le tableau
+        $('.sort_table').on('click', function(){
+            var col = $(this).attr('data-col');
+            //Si on est deja sur cette colonne on change l'ordre
+            if(order == col){
+                order = col + ' desc';
+            } else {
+                order = col;
+            }
+            updateTab(pageActuel);
+        });
 
         //Si la limite change
         $('#limit').on('change', function () {
@@ -226,20 +244,17 @@ global $_config;
 
     });
 
-    function updateTab(page = 1, limit = <?= $limit ?>, order = '') {
+    function updateTab(page = 1, limit = <?= $limit ?>) {
         var params = [];
         params.push({'name': 'table', 'value': '<?= $nom ?>'});
         params.push({'name': 'page', 'value': page});
         params.push({'name': 'limit', 'value': limit});
+        params.push({'name': 'order', 'value': order});
         $('.pk').each(function () {
             params.push({'name': $(this).attr('name'), 'value': $(this).val()});
         });
-        if (order.trim() === '') {
-            $.post('<?= $_config['web_root'] ?>Affichage/ajx_tableContent', params, function (data) {
-                $('#table_content').html(data);
-            });
-        } else {
-            return false;
-    }
+        $.post('<?= $_config['web_root'] ?>Affichage/ajx_tableContent', params, function (data) {
+            $('#table_content').html(data);
+        });
     }
 </script>
