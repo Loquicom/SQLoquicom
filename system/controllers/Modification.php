@@ -21,7 +21,19 @@ class Modification extends ControllerIni {
     }
 
     public function update() {
-        $page = $this->load->load_view('update', array('table' => $_POST['table']), true);
+        //Recup du nom des colonnes
+        $col = $this->model->affichage_model->getColumn($_POST['table']);
+        //Info de la table
+        $info = $this->model->affichage_model->getInfo($_POST['table']);
+        //Recup des clef primaires
+        $pk = $this->model->modif_model->getPrimary($_POST['table']);
+        //On associe les clef avec les valeurs des lignes a modifier
+        $lignes = array();
+        foreach ($_POST['pk-value'] as $pkValue) {
+            $lignes[] = $this->model->modif_model->getLine($_POST['table'], array_combine($pk, explode(';', $pkValue)));
+        }
+        //Chargement de la vue
+        $page = $this->load->load_view('update', array('table' => $_POST['table'], 'col' => $col['list'], 'infos' => $info, 'lines' => $lignes), true);
         $this->load->load_view('webpage', array('body' => $page));
     }
 
@@ -50,6 +62,38 @@ class Modification extends ControllerIni {
             //Si tous n'est pas vide on inser
             if (!$empty) {
                 echo 'Ligne ' . ($lineNum + 1) . ' : ' . $this->model->modif_model->insert($line, $table) . '<br>';
+            }
+        }
+    }
+    
+    public function ajx_update(){
+        //Recupération du nom de la table
+        $table = $_POST['table'];
+        unset($_POST['table']);
+        //Recup des clef primaires et de leur valeur
+        $pk = $_POST['pk'];
+        unset($_POST['pk']);
+        //On associe chaque champ a sa ligne
+        $insert = array();
+        foreach ($_POST as $champ => $vals) {
+            $i = 0;
+            foreach ($vals as $val) {
+                $insert[$i][$champ] = $val;
+                $i++;
+            }
+        }
+        //On verifie que tous n'est pas vide pour insérer
+        foreach ($insert as $lineNum => $line) {
+            $empty = true;
+            foreach ($line as $val) {
+                if (trim($val) != '') {
+                    $empty = false;
+                    break;
+                }
+            }
+            //Si tous n'est pas vide on inser
+            if (!$empty) {
+                echo 'Ligne ' . ($lineNum + 1) . ' : ' . $this->model->modif_model->update($line, $pk[$lineNum], $table) . '<br>';
             }
         }
     }
