@@ -65,8 +65,8 @@ class Modification extends ControllerIni {
             }
         }
     }
-    
-    public function ajx_update(){
+
+    public function ajx_update() {
         //Recupération du nom de la table
         $table = $_POST['table'];
         unset($_POST['table']);
@@ -137,6 +137,16 @@ class Modification extends ControllerIni {
         $sql = "Truncate Table " . $_POST['table'];
         $this->model->modif_model->execute($sql);
         echo json_encode(array('etat' => 'ok', 'message' => 'Table vidée'));
+    }
+
+    public function ajx_drop() {
+        if (!isset($_POST['table'])) {
+            echo json_encode(array('etat' => 'err', 'message' => 'Parametre incorrect'));
+            exit;
+        }
+        $sql = "Drop Table " . $_POST['table'] . " CASCADE";
+        $this->model->modif_model->execute($sql);
+        echo json_encode(array('etat' => 'ok', 'message' => 'Table supprimée'));
     }
 
 }

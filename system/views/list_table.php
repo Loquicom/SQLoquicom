@@ -3,39 +3,57 @@
 global $_config;
 ?>
 
-<div class="container">
-    <div class="row-fluid">
-        <div class="col2"></div>
-        <div class="col8">
-            <table class="table" style="margin-bottom: 3em;">
-                <thead>
-                    <tr>
-                        <th>Nom de la table</th>
-                        <th class="mobile-hidden" style="text-align: center;">Nombre de ligne</th>
-                        <th style="padding-left: 2.8em;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    foreach ($tables as $name => $nbLigne) {
-                        ?>
-                        <tr>
-                            <td><?= $name ?></td>
-                            <td class="mobile-hidden center"><?= $nbLigne ?></td>
-                            <td data-name="<?= $name ?>">
-                                <div class="btn-group">
-                                    <button class="btn btn-default btn_view_table main-color text-color" title="Contenue de la table"><i class="material-icons">view_list</i></button>
-                                    <button class="btn btn-default brn_suppr_table main-color text-color" title="Supprimer la table"><i class="material-icons">delete_forever</i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php
-                    }
+<div class="row-fluid">
+    <div class="col2"></div>
+    <div class="col8">
+        <table class="table" style="margin-bottom: 3em;">
+            <thead>
+                <tr>
+                    <th>Nom de la table</th>
+                    <th class="mobile-hidden" style="text-align: center;">Nombre de ligne</th>
+                    <th style="padding-left: 2.8em;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                <?php
+                if (count($tables) <= 0) {
+                    echo '<tr><td colspan="3"><div class="alert a-is-info"><i class="material-icons">info</i>Aucune table</div></td></tr>';
+                }
+                foreach ($tables as $name => $nbLigne) {
                     ?>
-                </tbody>
-            </table>
+                    <tr class="line">
+                        <td><?= $name ?></td>
+                        <td class="mobile-hidden center"><?= $nbLigne ?></td>
+                        <td data-name="<?= $name ?>">
+                            <div class="btn-group">
+                                <button class="btn btn-default btn_view_table main-color text-color" title="Contenue de la table"><i class="material-icons">view_list</i></button>
+                                <button class="btn btn-default brn_suppr_table main-color text-color" title="Supprimer la table"><i class="material-icons">delete_forever</i></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="col2"></div>
+</div>
+
+<!-- Contenue pour les dialog -->
+<div id="conf_action" class="hide">
+    <div class="row-fluid alert a-is-warning">
+        <div class="col1">
+            <i class="material-icons">warning</i>
         </div>
-        <div class="col2"></div>
+        <div class="col11" id="conf_action_text">
+        </div>
+    </div>
+    <div class="row-fluid" style="padding-top: 1em; padding-bottom: 2em;">
+        <div class="offset10 col2">
+            <span style="padding-right: 1em;"><button class="btn btn-default close-dialog text-color">Annuler</button></span>
+            <button id="conf_btn" class="btn btn-default main-color text-color">Valider</button>
+        </div>
     </div>
 </div>
 
@@ -44,6 +62,29 @@ global $_config;
         $('.btn_view_table').on('click', function () {
             var table = $(this).closest('td').attr('data-name');
             location.href = '<?= $_config['web_root'] ?>Affichage/table/' + table;
+        });
+
+        //Suppression fichier
+        var line = null;
+        var table = null;
+        $('.brn_suppr_table').on('click', function () {
+            line = $(this).closest('tr');
+            table = $(this).closest('td').attr('data-name');
+            $('#conf_action_text').html('Voulez vous vraiment supprimer la table ?');
+            $('#conf_btn').addClass('btn_valid_suppr');
+            dialog($('#conf_action').html());
+
+        });
+        $('#dialog').on('click', '.btn_valid_suppr', function () {
+            $.post('<?= $_config['web_root'] ?>Modification/ajx_drop', {'table': table}, function (data) {
+                if (data.etat == 'ok') {
+                    line.remove();
+                    if ($('.line').length < 1) {
+                        $('#tbody').html('<tr><td colspan="3"><div class="alert a-is-info"><i class="material-icons">info</i>Aucune table</div></td></tr>');
+                    }
+                }
+                dialog();
+            }, 'json');
         });
     });
 </script>
