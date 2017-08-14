@@ -35,7 +35,6 @@ class Parametre extends ControllerIni {
 
     
     public function ajx_supprFile() {
-        var_dump(file_exists('data/db/' . $_POST['file']));
         if(isset($_POST['file']) && file_exists('data/db/' . $_POST['file'])){
             unlink('data/db/' . $_POST['file']);
             echo json_encode(array('etat' => 'ok'));
