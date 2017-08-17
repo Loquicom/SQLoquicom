@@ -42,7 +42,7 @@ global $_pref;
                     <?php if ($_db !== null && $_db !== false) { ?>
                         <nav class="right-float mobile-hidden">
                             <a class="text-color btn-pill" href="<?= $_config['web_root'] ?>Affichage">Tables</a>
-                            <a class="text-color btn-pill" href="#">Requeteur SQL</a>
+                            <a class="text-color btn-pill" href="<?= $_config['web_root'] ?>Requeteur">Requeteur SQL</a>
                             <a class="text-color btn-pill" href="<?= $_config['web_root'] ?>Parametre">Param&egrave;tre</a>
                             <a class="text-color btn-pill" href="<?= $_config['web_root'] ?>Connexion/deco">Déconnexion</a>
                         </nav>

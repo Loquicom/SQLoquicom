@@ -81,23 +81,3 @@ final class Database {
         return self::$_DSN !== null ;
     }
 }
-
-
-/*
-myPDO::setConfiguration('mysql:host=mysql;dbname=cutron01_cdobj;charset=utf8', 'web', 'web') ;
-
-$pdo = myPDO::getInstance() ;
-
-$stmt = $pdo->prepare(<<<SQL
-    SELECT *
-    FROM artiste
-    ORDER BY name
-SQL
-) ;
-
-$stmt->execute() ;
-
-while (($ligne = $stmt->fetch()) !== false) {
-    echo "<p>{$ligne['name']}\n" ;
-}
-*/
