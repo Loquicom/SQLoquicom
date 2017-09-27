@@ -55,7 +55,8 @@ main {
     z-index: 5;
     height: 100%;
     width: 40%;
-    background-color: black;
+    background-color: #424242;
+    color: white;
 }
 
 .center{
