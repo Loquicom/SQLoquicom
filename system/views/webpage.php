@@ -70,7 +70,7 @@ global $_pref;
             <?= $body ?>
         </main>
         
-        <footer class="center" style="color: #bdbdbd">
+        <footer class="center" style="color: #bdbdbd; margin-top: 1em;">
             <div class="row-fluid">
                 <div class="col12">
                     <img src="<?= $_config['web_root'] ?>system/frmw/SQLoquicom-logo.svg" alt="SQLoquicom logo" width="30" height="30">

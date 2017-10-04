@@ -31,7 +31,7 @@ class Modif_model extends ModelIni {
         $first = true;
         foreach ($data as $key => $val) {
             $and = " And";
-            if($first){
+            if ($first) {
                 $and = "";
             }
             if (trim($val) != '') {
@@ -40,7 +40,7 @@ class Modif_model extends ModelIni {
         }
         //Id des parametre a mettre a jour
         $where = "";
-        foreach ($id as $pk => $pkVal){
+        foreach ($id as $pk => $pkVal) {
             $where .= " And " . $pk . " = '" . $pkVal . "'";
         }
         $sql = 'Update ' . $table . ' set' . $set . ' Where 1=1' . $where . ';';
@@ -79,6 +79,31 @@ class Modif_model extends ModelIni {
             }
         }
         return $return;
+    }
+
+    public function delete($table, $keysValue) {
+        $pk = $this->getPrimary($table);
+        $i = 0;
+        foreach ($keysValue as $val) {
+            //On delete chaque ligne envoyer
+            $sql = 'Delete From ' . $table;
+            //On recupere la valeur de toutes les clef primaire
+            $val = explode(';', $val);
+            //Pour toutes les valeurs
+            $j = 0;
+            //On parcours toutes les clef primaire
+            foreach ($val as $value) {
+                if ($j == 0) {
+                    $sql .= " Where " . $pk[$j] . " = '" . $value . "'";
+                } else {
+                    $sql .= " And " . $pk[$j] . " = '" . $value . "'";
+                }
+                $j++;
+            }
+            //On delete
+            $this->execute($sql);
+            $i++;
+        }
     }
 
     public function execute($sql) {

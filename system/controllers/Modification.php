@@ -103,28 +103,7 @@ class Modification extends ControllerIni {
             echo json_encode(array('etat' => 'err', 'message' => 'Parametres invalides'));
             exit;
         }
-        $pk = $this->model->modif_model->getPrimary($_POST['table']);
-        $i = 0;
-        foreach ($_POST['pk-value'] as $val) {
-            //On delete chaque ligne envoyer
-            $sql = 'Delete From ' . $_POST['table'];
-            //On recupere la valeur de toutes les clef primaire
-            $val = explode(';', $val);
-            //Pour toutes les valeurs
-            $j = 0;
-            //On parcours toutes les clef primaire
-            foreach ($val as $value) {
-                if ($j == 0) {
-                    $sql .= " Where " . $pk[$j] . " = '" . $value . "'";
-                } else {
-                    $sql .= " And " . $pk[$j] . " = '" . $value . "'";
-                }
-                $j++;
-            }
-            //On delete
-            $this->model->modif_model->execute($sql);
-            $i++;
-        }
+        $this->model->modif_model->delete($_POST['table'], $_POST['pk-value']);
         //Retour
         echo json_encode(array('etat' => 'ok', 'message' => $i . ' ligne(s) supprimée(s)'));
     }
