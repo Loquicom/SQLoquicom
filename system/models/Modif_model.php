@@ -105,6 +105,16 @@ class Modif_model extends ModelIni {
             $i++;
         }
     }
+    
+    public function truncate($table){
+        $sql = "Truncate Table " . $table;
+        $this->execute($sql);
+    }
+    
+    public function drop($table){
+        $sql = "Drop Table " . $table . " CASCADE";
+        $this->execute($sql);
+    }
 
     public function execute($sql) {
         $requete = $this->db->prepare($sql);

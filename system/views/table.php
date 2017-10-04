@@ -106,7 +106,7 @@ global $_config;
     <div class="row-fluid" style="padding-top: 1em; padding-bottom: 2em;">
         <div class="offset8 col4">
             <span style="padding-right: 1em;"><button class="btn btn-default close-dialog">Annuler</button></span>
-            <button id="conf_btn" class="btn btn-primary">Valider</button>
+            <button id="conf_btn" class="btn btn-primary main-color text-color">Valider</button>
         </div>
     </div>
 </div>

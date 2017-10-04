@@ -113,8 +113,7 @@ class Modification extends ControllerIni {
             echo json_encode(array('etat' => 'err', 'message' => 'Parametre incorrect'));
             exit;
         }
-        $sql = "Truncate Table " . $_POST['table'];
-        $this->model->modif_model->execute($sql);
+        $this->model->modif_model->truncate($_POST['table']);
         echo json_encode(array('etat' => 'ok', 'message' => 'Table vidée'));
     }
 
@@ -123,8 +122,7 @@ class Modification extends ControllerIni {
             echo json_encode(array('etat' => 'err', 'message' => 'Parametre incorrect'));
             exit;
         }
-        $sql = "Drop Table " . $_POST['table'] . " CASCADE";
-        $this->model->modif_model->execute($sql);
+        $this->model->modif_model->drop($_POST['table']);
         echo json_encode(array('etat' => 'ok', 'message' => 'Table supprimée'));
     }
 
