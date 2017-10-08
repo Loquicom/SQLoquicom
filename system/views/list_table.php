@@ -3,9 +3,16 @@
 global $_config;
 ?>
 
+
 <div class="row-fluid">
-    <div class="col2"></div>
-    <div class="col8">
+    <div class="offset1 col10">
+        <span class="btn-label main-color text-color">Ajouter une table</span><br>  
+        <a href="./Create" class="btn btn-default btn_action main-color text-color" title="créer" style="margin-left: 1.5em;"><i class="material-icons">add</i></a>
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="offset1 col10">
         <table class="table" style="margin-bottom: 3em;">
             <thead>
                 <tr>
@@ -37,7 +44,6 @@ global $_config;
             </tbody>
         </table>
     </div>
-    <div class="col2"></div>
 </div>
 
 <!-- Contenue pour les dialog -->

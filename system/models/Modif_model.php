@@ -52,35 +52,7 @@ class Modif_model extends ModelIni {
             return $ex->getMessage();
         }
     }
-
-    public function getLine($table, $id) {
-        $sql = "Select * From " . $table . " Where 1=1";
-        foreach ($id as $champ => $val) {
-            $sql .= " And " . $champ . " = '" . $val . "'";
-        }
-        $requete = $this->db->prepare($sql);
-        $requete->execute();
-        $result = $requete->fetchAll();
-        return $result[0];
-    }
-
-    public function getPrimary($table) {
-        $requete = $this->db->prepare("Describe " . $table);
-        $requete->execute();
-        $result = $requete->fetchAll();
-        if ($result === false) {
-            return false;
-        }
-        $return = array();
-        foreach ($result as $champ) {
-            //On recupere les clef primaire
-            if ($champ['Key'] == 'PRI') {
-                $return[] = $champ['Field'];
-            }
-        }
-        return $return;
-    }
-
+    
     public function delete($table, $keysValue) {
         $pk = $this->getPrimary($table);
         $i = 0;
@@ -114,6 +86,34 @@ class Modif_model extends ModelIni {
     public function drop($table){
         $sql = "Drop Table " . $table . " CASCADE";
         $this->execute($sql);
+    }
+
+    public function getLine($table, $id) {
+        $sql = "Select * From " . $table . " Where 1=1";
+        foreach ($id as $champ => $val) {
+            $sql .= " And " . $champ . " = '" . $val . "'";
+        }
+        $requete = $this->db->prepare($sql);
+        $requete->execute();
+        $result = $requete->fetchAll();
+        return $result[0];
+    }
+
+    public function getPrimary($table) {
+        $requete = $this->db->prepare("Describe " . $table);
+        $requete->execute();
+        $result = $requete->fetchAll();
+        if ($result === false) {
+            return false;
+        }
+        $return = array();
+        foreach ($result as $champ) {
+            //On recupere les clef primaire
+            if ($champ['Key'] == 'PRI') {
+                $return[] = $champ['Field'];
+            }
+        }
+        return $return;
     }
 
     public function execute($sql) {
