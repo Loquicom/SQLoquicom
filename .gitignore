@@ -1,2 +1,5 @@
-/data/
 /.htaccess
+/data/localhost(-)core.dat
+/sqloquicom/system/config/local.php
+/sqloquicom/application/config/pref.php
+/sqloquicom/assets/css/pref.css
