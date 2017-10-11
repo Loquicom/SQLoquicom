@@ -17,7 +17,7 @@ defined('FC_INI') or exit('Acces Denied');
                 <tr>
                     <th>Nom de la table</th>
                     <th class="mobile-hidden" style="text-align: center;">Nombre de ligne</th>
-                    <th style="padding-left: 2.8em;">Action</th>
+                    <th style="padding-left: 2.6em">Action</th><!-- 4.5em quand btn alter actif -->
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -33,6 +33,7 @@ defined('FC_INI') or exit('Acces Denied');
                         <td data-name="<?= $name ?>">
                             <div class="btn-group">
                                 <button class="btn btn-default btn_view_table main-color text-color" title="Contenue de la table"><i class="material-icons">view_list</i></button>
+                                <!--button class="btn btn-default btn_alter_table main-color text-color" title="Modifier la table"><i class="material-icons">edit</i></button-->
                                 <button class="btn btn-default brn_suppr_table main-color text-color" title="Supprimer la table"><i class="material-icons">delete_forever</i></button>
                             </div>
                         </td>
@@ -64,9 +65,16 @@ defined('FC_INI') or exit('Acces Denied');
 
 <script type="text/javascript">
     $(document).ready(function () {
+        //Affichage
         $('.btn_view_table').on('click', function () {
             var table = $(this).closest('td').attr('data-name');
             location.href = '<?= redirect_url('Affichage/table/') ?>' + table;
+        });
+
+        //Alter
+        $('.btn_alter_table').on('click', function () {
+            var table = $(this).closest('td').attr('data-name');
+            location.href = '<?= redirect_url('Structure/alter/') ?>' + table;
         });
 
         //Suppression fichier

@@ -42,10 +42,10 @@ defined('FC_INI') or exit('Acces Denied');
         <div class="col8">
             <span class="btn-label main-color text-color">Boutons d'actions</span><br>
             <div class="btn-group">
-                <button class="btn btn-default btn_action main-color text-color" data-action="insert" title="insérer"><i class="material-icons">playlist_add</i></button>
-                <button class="btn btn-default btn_action main-color text-color" data-action="update" title="modifier"><i class="material-icons">description</i></button>
-                <button class="btn btn-default btn_action main-color text-color" data-action="delete" title="supprimer"><i class="material-icons">delete_forever</i></button>
-                <button class="btn btn-default btn_action main-color text-color" data-action="truncate" title="vider"><i class="material-icons">restore_page</i></button>
+                <button class="btn btn-default btn_action main-color text-color" data-action="insert" title="Insérer"><i class="material-icons">playlist_add</i></button>
+                <button class="btn btn-default btn_action main-color text-color" data-action="update" title="Modifier"><i class="material-icons">edit</i></button>
+                <button class="btn btn-default btn_action main-color text-color" data-action="delete" title="Supprimer"><i class="material-icons">delete_forever</i></button>
+                <button class="btn btn-default btn_action main-color text-color" data-action="truncate" title="Vider"><i class="material-icons">restore_page</i></button>
             </div>
         </div>
         <div class="col4" style="text-align: right;">

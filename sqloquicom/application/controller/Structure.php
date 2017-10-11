@@ -14,6 +14,10 @@ class Structure extends FC_Controller{
         $this->load->view('webpage', array('body' => $page));
     }
     
+    public function alter($table){
+        var_dump($table);
+    }
+
     public function ajx_create(){
         if(!($this->post('table') !== false && trim($this->post('table')) != '' && trim($this->post('chp', 0, 'nom')) != '' && trim($this->post('chp', 0, 'type')) != '')){
             echo 'Donn&eacute;es manquantes';
