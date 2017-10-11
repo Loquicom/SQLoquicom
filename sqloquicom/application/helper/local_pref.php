@@ -1,4 +1,5 @@
 <?php
+
 defined('FC_INI') or exit('Acces Denied');
 
 if (!function_exists('setLocalPref')) {
@@ -63,32 +64,46 @@ if (!function_exists('setLocalPref')) {
 
 }
 
-if(!function_exists('saveDatabase')){
-    
+if (!function_exists('saveDatabase')) {
+
     function saveDatabase($host, $name, $usr, $pass, $rewrite = false) {
-    //Création du dossier de sauvegarde si il n'existe pas
-    if (!file_exists('../data/')) {
-        mkdir('../data/');
-        //Création de l'htaccess
-        $htaccess = fopen('../data/.htaccess', 'w');
-        fwrite($htaccess, 'Deny from all');
-        fclose($htaccess);
+        //Création du dossier de sauvegarde si il n'existe pas
+        if (!file_exists('../data/')) {
+            mkdir('../data/');
+            //Création de l'htaccess
+            $htaccess = fopen('../data/.htaccess', 'w');
+            fwrite($htaccess, 'Deny from all');
+            fclose($htaccess);
+        }
+        //Création du fichier si il n'existe pas deja ou qu'il existe et que le reécrit
+        if (!file_exists('../data/' . $host . '(-)' . $name . '.dat') || (file_exists('../data/' . $host . '(-)' . $name . '.dat') && $rewrite)) {
+            $data = fopen('../data/' . $host . '(-)' . $name . '.dat', 'w');
+            $content = md5($host . '(-)' . $name) . "\r\n";
+            $content .= $host . "\r\n";
+            $content .= $name . "\r\n";
+            $content .= $usr . "\r\n";
+            $content .= $pass;
+            $content = base64_encode($content);
+            $content .= "\r\n" . md5($content);
+            fwrite($data, $content);
+            fclose($data);
+            return true;
+        }
+        return false;
     }
-    //Création du fichier si il n'existe pas deja ou qu'il existe et que le reécrit
-    if (!file_exists('../data/' . $host . '(-)' . $name . '.dat') || (file_exists('../data/' . $host . '(-)' . $name . '.dat') && $rewrite)) {
-        $data = fopen('../data/' . $host . '(-)' . $name . '.dat', 'w');
+
+}
+
+if (!function_exists('saveDatabaseContent')) {
+
+    function saveDatabaseContent($host, $name, $usr, $pass) {
         $content = md5($host . '(-)' . $name) . "\r\n";
         $content .= $host . "\r\n";
         $content .= $name . "\r\n";
         $content .= $usr . "\r\n";
         $content .= $pass;
         $content = base64_encode($content);
-        $content .= "\r\n" . md5($content);
-        fwrite($data, $content);
-        fclose($data);
-        return true;
+        return $content;
     }
-    return false;
-}
-    
+
 }

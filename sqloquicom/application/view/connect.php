@@ -49,7 +49,12 @@ global $_config;
             <?php } ?>
             <div class="form-group">
                 <label>
-                    <input type="checkbox" name="keep" style="margin-right: 1em;">Garder la base en mémoire
+                    <input type="checkbox" name="keep" style="margin-right: 1em;">Garder la base en mémoire sur le serveur
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="keep-cookie" style="margin-right: 1em;">Garder la base en mémoire sur ce navigateur
                 </label>
             </div>
             <div class="center">
