@@ -15,6 +15,12 @@ class Requeteur extends FC_Controller {
         $this->load->view('webpage', array('body' => $page));
     }
 
+    public function ajx_read_file() {
+        $encodedData = str_replace(' ', '+', $this->post('file'));
+        $decodedData = base64_decode($encodedData);
+        echo $decodedData;
+    }
+
     public function ajx_requete() {
         if ($this->post('requete') === false) {
             echo json_encode(array('etat' => 'err', 'message' => 'Parametre absent'));
