@@ -108,7 +108,9 @@ defined('FC_INI') or exit('Acces Denied');
                 //Envoie au php pour resultat autocomplete
                 if (lastWord.trim() != '') {
                     $.post('<?= redirect_url('Requeteur/ajx_autocomplete') ?>', {'search': lastWord}, function (data) {
-                        $('#proposition').html('1 - <span id="prop0" style="padding-right: 2em;">' + data[0] + '</span>');
+                        if (data.length >= 1) {
+                            $('#proposition').html('1 - <span id="prop0" style="padding-right: 2em;">' + data[0] + '</span>');
+                        }
                         if (data.length >= 2) {
                             $('#proposition').append('2 - <span id="prop1" style="padding-right: 2em;">' + data[1] + '</span>');
                         }

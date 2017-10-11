@@ -55,12 +55,12 @@ class Requeteur extends FC_Controller {
         $result = array();
         foreach ($this->table as $table) {
             //Si la table commence par $search on l'ajoute
-            if (substr($table, 0, strlen($search)) == $search) {
+            if (strtolower(substr($table, 0, strlen($search))) == strtolower($search)) {
                 $result[] = $table;
             }
             foreach ($this->champ[$table] as $champ) {
                 //Si le champ commence par $search on l'ajoute
-                if (substr($champ, 0, strlen($search)) == $search) {
+                if (strtolower(substr($champ, 0, strlen($search))) == strtolower($search)) {
                     $result[] = $champ;
                 }
             }
