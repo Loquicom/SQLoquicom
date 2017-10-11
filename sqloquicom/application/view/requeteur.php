@@ -81,16 +81,15 @@ defined('FC_INI') or exit('Acces Denied');
                 $(this).val($(this).val() + $('#prop0').html());
                 $('#proposition').html('');
                 lastWord = '';
-            }
-            else if(event.altKey && (event.key == "&" || event.key == "é" || event.key == "\"" || event.key == "'" || event.key == "(")){
+            } else if (event.altKey && (event.key == "&" || event.key == "é" || event.key == "\"" || event.key == "'" || event.key == "(")) {
                 var prop = "#prop";
-                if(event.key == "&"){
+                if (event.key == "&") {
                     prop += "0";
-                } else if(event.key == "é"){
+                } else if (event.key == "é") {
                     prop += "1";
-                } else if(event.key == "\""){
+                } else if (event.key == "\"") {
                     prop += "2";
-                } else if(event.key == "'"){
+                } else if (event.key == "'") {
                     prop += "3";
                 } else {
                     prop += "4";
@@ -110,18 +109,21 @@ defined('FC_INI') or exit('Acces Denied');
                     $.post('<?= redirect_url('Requeteur/ajx_autocomplete') ?>', {'search': lastWord}, function (data) {
                         if (data.length >= 1) {
                             $('#proposition').html('1 - <span id="prop0" style="padding-right: 2em;">' + data[0] + '</span>');
-                        }
-                        if (data.length >= 2) {
-                            $('#proposition').append('2 - <span id="prop1" style="padding-right: 2em;">' + data[1] + '</span>');
-                        }
-                        if (data.length >= 3) {
-                            $('#proposition').append('3 - <span id="prop2" style="padding-right: 2em;">' + data[2] + '</span>');
-                        }
-                        if (data.length >= 4) {
-                            $('#proposition').append('3 - <span id="prop3" style="padding-right: 2em;">' + data[3] + '</span>');
-                        }
-                        if (data.length >= 5) {
-                            $('#proposition').append('3 - <span id="prop4" style="padding-right: 2em;">' + data[4] + '</span>');
+                            if (data.length >= 2) {
+                                $('#proposition').append('2 - <span id="prop1" style="padding-right: 2em;">' + data[1] + '</span>');
+                            }
+                            if (data.length >= 3) {
+                                $('#proposition').append('3 - <span id="prop2" style="padding-right: 2em;">' + data[2] + '</span>');
+                            }
+                            if (data.length >= 4) {
+                                $('#proposition').append('3 - <span id="prop3" style="padding-right: 2em;">' + data[3] + '</span>');
+                            }
+                            if (data.length >= 5) {
+                                $('#proposition').append('3 - <span id="prop4" style="padding-right: 2em;">' + data[4] + '</span>');
+                            }
+                        } else {
+                            //Si aucun resultat on vide ceux deja affiché
+                            $('#proposition').html('');
                         }
                     }, 'json');
                 } else {
