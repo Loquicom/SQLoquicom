@@ -4,15 +4,69 @@ defined('FC_INI') or exit('Acces Denied');
 
 class Requeteur extends FC_Controller {
 
+    /**
+     * Liste des tables de la base
+     * @var mixed 
+     */
+    private $table = array();
+
+    /**
+     * Liste des champs de la base
+     * @var mixed
+     */
+    private $champ = array();
+
     public function __construct() {
         parent::__construct();
         $this->session->connect !== false or redirect('Connexion');
         $this->load->model('Requeteur_model');
+        //Ajout de la liste des champs et des tables
+        if ($this->session->get('requeteur') !== false) {
+            $this->table = $this->session->requeteur['table'];
+            $this->champ = $this->session->requeteur['champ'];
+        } else {
+            //Recup des infos
+            $this->load->model('Affichage_model');
+            //Les tables
+            $tables = $this->affichage_model->getTables();
+            foreach ($tables as $table => $ligne) {
+                $this->table[] = $table;
+            }
+            //Les champs
+            foreach ($this->table as $table) {
+                $champs = $this->affichage_model->getColumn($table);
+                $this->champ[$table] = $champs['list'];
+            }
+            //Stockage en Seesion pour 60s (pour rester à jour)
+            $this->session->add_temp(array('requeteur' => array('table' => $this->table, 'champ' => $this->champ)), '', 60);
+        }
     }
 
     public function index() {
         $page = $this->load->view('requeteur', null, true);
         $this->load->view('webpage', array('body' => $page));
+    }
+
+    public function ajx_autocomplete() {
+        if ($this->post('search') === false) {
+            exit;
+        }
+        $search = $this->post('search');
+        $result = array();
+        foreach ($this->table as $table) {
+            //Si la table commence par $search on l'ajoute
+            if (substr($table, 0, strlen($search)) == $search) {
+                $result[] = $table;
+            }
+            foreach ($this->champ[$table] as $champ) {
+                //Si le champ commence par $search on l'ajoute
+                if (substr($champ, 0, strlen($search)) == $search) {
+                    $result[] = $champ;
+                }
+            }
+        }
+        //Envoie du resultat
+        echo json_encode($result);
     }
 
     public function ajx_read_file() {

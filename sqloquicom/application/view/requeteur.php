@@ -11,7 +11,13 @@ defined('FC_INI') or exit('Acces Denied');
     </div>
 </div>
 <div class="row-fluid">
-    <div class="col 12">
+    <div class="col2">
+        <strong>Proposition :</strong>
+    </div>
+    <div class="col8 center" id="proposition">
+
+    </div>
+    <div class="col2">
         <div style="text-align: right">
             <button type="button" id="send_requete" class="btn btn-primary main-color text-color">Envoyer</button>
         </div>
@@ -65,6 +71,63 @@ defined('FC_INI') or exit('Acces Denied');
                 $('#requeteur').css('box-shadow', '');
             }
         });
+
+        //Aide à la completion
+        var lastWord;
+        $('#requeteur').on('keyup', function (event) {
+            //Recupération de la proposition de l'autocompletion
+            if (event.ctrlKey && event.key == " ") {
+                $(this).val($(this).val().replace(new RegExp(lastWord + '$'), ''));
+                $(this).val($(this).val() + $('#prop0').html());
+                $('#proposition').html('');
+                lastWord = '';
+            }
+            else if(event.altKey && (event.key == "&" || event.key == "é" || event.key == "\"" || event.key == "'" || event.key == "(")){
+                var prop = "#prop";
+                if(event.key == "&"){
+                    prop += "0";
+                } else if(event.key == "é"){
+                    prop += "1";
+                } else if(event.key == "\""){
+                    prop += "2";
+                } else if(event.key == "'"){
+                    prop += "3";
+                } else {
+                    prop += "4";
+                }
+                $(this).val($(this).val().replace(new RegExp(lastWord + '$'), ''));
+                $(this).val($(this).val() + $(prop).html());
+                $('#proposition').html('');
+                lastWord = '';
+            }
+            //Generation autocomplete    
+            else {
+                //Recup du dernier mot
+                lastWord = $(this).val().split(" ");
+                lastWord = lastWord[lastWord.length - 1];
+                //Envoie au php pour resultat autocomplete
+                if (lastWord.trim() != '') {
+                    $.post('<?= redirect_url('Requeteur/ajx_autocomplete') ?>', {'search': lastWord}, function (data) {
+                        $('#proposition').html('1 - <span id="prop0" style="padding-right: 2em;">' + data[0] + '</span>');
+                        if (data.length >= 2) {
+                            $('#proposition').append('2 - <span id="prop1" style="padding-right: 2em;">' + data[1] + '</span>');
+                        }
+                        if (data.length >= 3) {
+                            $('#proposition').append('3 - <span id="prop2" style="padding-right: 2em;">' + data[2] + '</span>');
+                        }
+                        if (data.length >= 4) {
+                            $('#proposition').append('3 - <span id="prop3" style="padding-right: 2em;">' + data[3] + '</span>');
+                        }
+                        if (data.length >= 5) {
+                            $('#proposition').append('3 - <span id="prop4" style="padding-right: 2em;">' + data[4] + '</span>');
+                        }
+                    }, 'json');
+                } else {
+                    $('#proposition').html('');
+                }
+            }
+        });
+
     });
 
     //Lecture fichier drang&drop
