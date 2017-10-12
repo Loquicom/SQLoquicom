@@ -81,7 +81,7 @@ class Requeteur extends FC_Controller {
             exit;
         }
         //Decoupage des requetes au niveau des ;
-        $requetes = explode(';', $this->post('requete'));
+        $requetes = explode(';', html_entity_decode($this->post('requete'), ENT_QUOTES));
         //On execute chaque requete
         $return = array('etat' => 'ok', 'info' => '', 'view' => array());
         foreach ($requetes as $i => $requete) {
