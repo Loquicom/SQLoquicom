@@ -53,10 +53,10 @@ $fc = get_instance();
                                 <li class="right-float"><i class="material-icons btn-mobile-nav" id>close</i></li><br>
                                 <li>Menu</li>
                                 <li><hr></li>
-                                <li>Tables</li>
-                                <li>Requeteur SQL</li>
-                                <li>Param&egrave;tre</li>
-                                <li>Déconnexion</li>
+                                <li><a style="color: white;" href="<?= redirect_url('Affichage') ?>">Tables</a></li>
+                                <li><a style="color: white;" href="<?= redirect_url('Requeteur') ?>">Requeteur SQL</a></li>
+                                <li><a style="color: white;" href="<?= redirect_url('Parametre') ?>">Param&egrave;tre</a></li>
+                                <li><a style="color: white;" href="<?= redirect_url('Connexion/deco') ?>">Déconnexion</a></li>
                             </ul>
                         </div>
                     <?php } ?>
