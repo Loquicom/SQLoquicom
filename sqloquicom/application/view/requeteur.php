@@ -75,8 +75,12 @@ defined('FC_INI') or exit('Acces Denied');
         //Aide à la completion
         var lastWord;
         $('#requeteur').on('keyup', function (event) {
+            //Envoie requete si shift + enter
+            if(event.shiftKey && event.key == "Enter"){
+                $('#send_requete').click();
+            }
             //Recupération de la proposition de l'autocompletion
-            if (event.ctrlKey && event.key == " ") {
+            else if (event.ctrlKey && event.key == " ") {
                 $(this).val($(this).val().replace(new RegExp(lastWord + '$'), ''));
                 $(this).val($(this).val() + $('#prop0').html());
                 $('#proposition').html('');

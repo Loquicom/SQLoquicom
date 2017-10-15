@@ -18,7 +18,7 @@ class Fraquicom {
 
     /**
      * Les valeurs du fichier de configuration
-     * @var mixed
+     * @var Config
      */
     public $config = null;
 

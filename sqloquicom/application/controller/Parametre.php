@@ -11,7 +11,7 @@ class Parametre extends FC_Controller {
     public function index() {
         //Recup de la liste des fichiers des bd sauvegarder
         if (file_exists('../data/')) {
-            $files = array_diff(scandir('../data/'), array('..', '.', '.htaccess'));
+            $files = array_diff(scandir('../data/'), array('..', '.', '.htaccess', 'export'));
             //On verifie que les fichiers ne sont pas modifié
             if (count($files) > 0) {
                 foreach ($files as $file) {

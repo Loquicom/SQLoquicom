@@ -97,6 +97,25 @@ $fc = get_instance();
 <div class="container">
     <div class="row">
         <div class="col12">
+            <h1>Exporter</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col4 center">
+            Exporter les tables et leurs contenue <br>
+            <button type="button" id="export_all" class="btn btn-primary main-color text-color">Exporter</button>
+        </div>
+        <div class="col4 center">
+            Exporter les tables <br>
+            <button type="button" id="export_create" class="btn btn-primary main-color text-color">Exporter</button>
+        </div>
+        <div class="col4 center">
+            Exporter le contenues des tables <br>
+            <button type="button" id="export_insert" class="btn btn-primary main-color text-color">Exporter</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col12">
             <h1>Personnalisation</h1>
         </div>
     </div>
@@ -289,6 +308,13 @@ $fc = get_instance();
 
     //Js page
     $(document).ready(function () {
+        //Export
+        $('#export_create').on('click', function(){
+           $.post('<?= redirect_url('Export/ajx_create') ?>', null, function(data){
+               location.href = '<?= redirect_url('Export/download_sql') ?>/' + data.id + '/' + data.name;
+           }, 'json');
+        });
+        
         //Active les color pickers
         $('.pick').click();
 

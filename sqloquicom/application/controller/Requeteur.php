@@ -128,7 +128,7 @@ class Requeteur extends FC_Controller {
         foreach ($result as $line) {
             $html .= '<tr>';
             foreach ($line as $val) {
-                $html .= '<td>' . $val . '</td>';
+                $html .= '<td>' . str_replace("\n", "<br>", $val) . '</td>';
             }
             $html .= '</tr>';
         }
