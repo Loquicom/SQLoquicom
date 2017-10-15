@@ -28,7 +28,16 @@ class Export extends FC_Controller {
     }
 
     private function export_data() {
-        
+        //Recuperation des tables
+        $tables = $this->affichage_model->getTables();
+        $sql = '';
+        foreach ($tables as $table => $nbLignes){
+            $res = $this->export_model->insert_script($table);
+            if(trim($res) != ''){
+                $sql .= $res . "\r\n\r\n";
+            }
+        }
+        return rtrim($sql, "\r\n");
     }
 
     private function generate_sql($sql) {
@@ -71,16 +80,36 @@ class Export extends FC_Controller {
     }
 
     public function ajx_create() {
+        //Verifie que c'est bien un appel ajax
+        if($this->post('ajx') === false){
+            exit;
+        }
+        //Generation du script
         $sql = $this->export_tables();
+        //Export
         echo json_encode(array('id' => $this->generate_sql($sql), 'name' => $this->config->get('db', 'name')));
     }
 
     public function ajx_insert() {
-        
+        //Verifie que c'est bien un appel ajax
+        if($this->post('ajx') === false){
+            exit;
+        }
+        //Generation du script
+        $sql = $this->export_data();
+        //Export
+        echo json_encode(array('id' => $this->generate_sql($sql), 'name' => $this->config->get('db', 'name')));
     }
 
     public function ajx_all() {
-        
+        //Verifie que c'est bien un appel ajax
+        if($this->post('ajx') === false){
+            exit;
+        }
+        //Generation du script
+        $sql = $this->export_tables() . $this->export_data();
+        //Export
+        echo json_encode(array('id' => $this->generate_sql($sql), 'name' => $this->config->get('db', 'name')));
     }
 
 }

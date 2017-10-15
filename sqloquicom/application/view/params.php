@@ -309,8 +309,18 @@ $fc = get_instance();
     //Js page
     $(document).ready(function () {
         //Export
+        $('#export_all').on('click', function(){
+           $.post('<?= redirect_url('Export/ajx_all') ?>', {'ajx': true}, function(data){
+               location.href = '<?= redirect_url('Export/download_sql') ?>/' + data.id + '/' + data.name;
+           }, 'json');
+        });
         $('#export_create').on('click', function(){
-           $.post('<?= redirect_url('Export/ajx_create') ?>', null, function(data){
+           $.post('<?= redirect_url('Export/ajx_create') ?>', {'ajx': true}, function(data){
+               location.href = '<?= redirect_url('Export/download_sql') ?>/' + data.id + '/' + data.name;
+           }, 'json');
+        });
+        $('#export_insert').on('click', function(){
+           $.post('<?= redirect_url('Export/ajx_insert') ?>', {'ajx': true}, function(data){
                location.href = '<?= redirect_url('Export/download_sql') ?>/' + data.id + '/' + data.name;
            }, 'json');
         });

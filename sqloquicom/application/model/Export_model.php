@@ -22,7 +22,7 @@ class Export_model extends FC_Model {
                 unset($sqlExpl[$i]);
             }
         }
-        $create = rtrim(trim(implode('', $sqlExpl)), ",") . "\r\n"  . ');';
+        $create = rtrim(trim(implode('', $sqlExpl)), ",") . "\r\n" . ');';
         //Generation du Alter table avec les contraintes
         $alter = '';
         if (!empty($constraint)) {
@@ -34,6 +34,42 @@ class Export_model extends FC_Model {
         }
         //Retour
         return array('create' => $create, 'alter' => $alter);
+    }
+
+    public function insert_script($table) {
+        //Recuperation des donnes
+        $this->db->execute("Select * From $table");
+        $data = $this->db->result();
+        //Si la table n'est pas vide
+        if (!empty($data)) {
+            //Recuperation champ et valeur
+            $first = true;
+            $champs = '';
+            $values = array();
+            foreach ($data as $key => $line) {
+                $values[$key] = '(';
+                foreach ($line as $champ => $val) {
+                    if ($first) {
+                        $champs .= $champ . ',';
+                    }
+                    $values[$key] .= "'" . $val . "',";
+                }
+                $values[$key] = rtrim($values[$key], ',') . ')';
+                if ($first) {
+                    $champs = rtrim($champs, ',');
+                    $first = false;
+                }
+            }
+            //Création de la requete
+            $sql = "Insert into $table ($champs) Values \r\n";
+            foreach ($values as $val) {
+                $sql .= $val . ",\r\n";
+            }
+            $sql = rtrim($sql, ",\r\n") . ";";
+            return $sql;
+        } else {
+            return '';
+        }
     }
 
 }
