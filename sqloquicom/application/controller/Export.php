@@ -9,6 +9,7 @@ class Export extends FC_Controller {
         $this->session->connect !== false or redirect('Connexion');
         $this->load->model('Export_model');
         $this->load->model('Affichage_model');
+        $this->load->helper('string');
     }
 
     private function export_tables() {
@@ -31,9 +32,9 @@ class Export extends FC_Controller {
         //Recuperation des tables
         $tables = $this->affichage_model->getTables();
         $sql = '';
-        foreach ($tables as $table => $nbLignes){
+        foreach ($tables as $table => $nbLignes) {
             $res = $this->export_model->insert_script($table);
-            if(trim($res) != ''){
+            if (trim($res) != '') {
                 $sql .= $res . "\r\n\r\n";
             }
         }
@@ -45,7 +46,7 @@ class Export extends FC_Controller {
         if (!file_exists('../data/export/')) {
             mkdir('../data/export/');
         }
-        $id = uniqid();
+        $id = get_unique_hash();
         write_file('../data/export/' . $id, $sql);
         return $id;
     }
@@ -70,7 +71,7 @@ class Export extends FC_Controller {
             //Suppression du fichier
             @unlink('../data/export/' . $id);
             //Si le dossier export est vide on le supprime
-            if(empty(array_diff(scandir('../data/export/'), array('..', '.')))){
+            if (empty(array_diff(scandir('../data/export/'), array('..', '.')))) {
                 @rmdir('../data/export/');
             }
         } else {
@@ -81,7 +82,7 @@ class Export extends FC_Controller {
 
     public function ajx_create() {
         //Verifie que c'est bien un appel ajax
-        if($this->post('ajx') === false){
+        if ($this->post('ajx') === false) {
             exit;
         }
         //Generation du script
@@ -92,7 +93,7 @@ class Export extends FC_Controller {
 
     public function ajx_insert() {
         //Verifie que c'est bien un appel ajax
-        if($this->post('ajx') === false){
+        if ($this->post('ajx') === false) {
             exit;
         }
         //Generation du script
@@ -103,13 +104,22 @@ class Export extends FC_Controller {
 
     public function ajx_all() {
         //Verifie que c'est bien un appel ajax
-        if($this->post('ajx') === false){
+        if ($this->post('ajx') === false) {
             exit;
         }
         //Generation du script
         $sql = $this->export_tables() . $this->export_data();
         //Export
         echo json_encode(array('id' => $this->generate_sql($sql), 'name' => $this->config->get('db', 'name')));
+    }
+    
+    public function ajx_export(){
+        //Verifie que c'est bien un appel ajax
+        if (!($this->post('sql') !== false && trim($this->post('sql')) != '')) {
+            exit;
+        }
+        //Export
+        echo json_encode(array('id' => $this->generate_sql($this->post('sql')), 'name' => 'requete-' . $this->config->get('db', 'name')));
     }
 
 }

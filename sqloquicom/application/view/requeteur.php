@@ -15,7 +15,6 @@ defined('FC_INI') or exit('Acces Denied');
         <strong>Proposition :</strong>
     </div>
     <div class="col8 center" id="proposition">
-
     </div>
     <div class="col2">
         <div style="text-align: right">
@@ -40,6 +39,15 @@ defined('FC_INI') or exit('Acces Denied');
     $(document).ready(function () {
         //Envoie Requete
         $('#send_requete').on('click', function () {
+            //Si c'est le btn exporter
+            if ($(this).html() == 'Exporter') {
+                $.post('<?= redirect_url('Export/ajx_export') ?>', {'sql': $('#requeteur').val()}, function (data) {
+                    location.href = '<?= redirect_url('Export/download_sql') ?>/' + data.id + '/' + data.name;
+                }, 'json');
+                //On s'arrete la
+                return true;
+            }
+
             //Remise a zero des zone d'affichage
             $('#return_info').html('');
             $('#return').html('');
@@ -60,6 +68,8 @@ defined('FC_INI') or exit('Acces Denied');
                     //Changement couleur textarea
                     $('#requeteur').css('border-color', '#00c42a');
                     $('#requeteur').css('box-shadow', '0 0 8px rgba(0, 196, 42, 0.6)');
+                    //Changement du btn en export requete
+                    $('#send_requete').html('Exporter');
                 }
             }, 'json');
         });
@@ -75,8 +85,10 @@ defined('FC_INI') or exit('Acces Denied');
         //Aide à la completion
         var lastWord;
         $('#requeteur').on('keyup', function (event) {
+            //Changement du btn en envoyer requete
+            $('#send_requete').html('Envoyer');
             //Envoie requete si shift + enter
-            if(event.shiftKey && event.key == "Enter"){
+            if (event.shiftKey && event.key == "Enter") {
                 $('#send_requete').click();
             }
             //Recupération de la proposition de l'autocompletion
