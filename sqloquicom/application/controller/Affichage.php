@@ -82,5 +82,32 @@ class Affichage extends FC_Controller {
         $return = str_replace('MUL', 'FK', str_replace('PRI', 'PK', $return));
         echo $return;
     }
+    
+    public function ajx_listChamp(){
+        if($this->post('table') === false){
+            echo json_encode(array('etat' => 'err'));
+            exit;
+        }
+        $champ = $this->affichage_model->getColumn($this->post('table'));
+        echo json_encode(array('etat' => 'ok', 'champ' => $champ['list']));
+    }
+    
+    public function ajx_typeChamp(){
+        if($this->post('table') === false || $this->post('champ') === false){
+            echo json_encode(array('etat' => 'err'));
+            exit;
+        }
+        $infos = $this->affichage_model->getInfo($this->post('table'));
+        //On charche le champ
+        foreach ($infos as $info){
+            if($info['Field'] == $this->post('champ')){
+                $defaut = ($info['Default'] === null)?'':$info['Default'];
+                echo json_encode(array('etat' => 'ok', 'type' => $info['Type'], 'defaut' => $defaut));
+                exit;
+            }
+        }
+        //Si aucune correspondance
+        echo json_encode(array('etat' => 'err'));
+    }
 
 }
