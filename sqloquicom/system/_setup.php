@@ -15,6 +15,10 @@ $data['root']['webroot'] = '';
 
 //Création de l'htacces de routage en fonction de l'ini
 $htaccess = fopen('../.htaccess', 'w');
+if($htaccess === false){
+    //Si le fichier n'est pas correctement ouvert
+    exit("Impossible de créer les fichiers de configuration);
+}
 $code = 'Options +FollowSymLinks' . "\r\n\r\n";
 $code .= 'RewriteEngine On' . "\r\n\r\n";
 $code .= 'RewriteBase /' . "\r\n\r\n";
