@@ -52,6 +52,9 @@ class Affichage extends FC_Controller {
                 $return .= '<td class="center"><input class="line_action" type="checkbox" name="pk-value[]" value="' . $pk . '"></td>';
             }
             foreach ($line as $val) {
+                if($val === null){
+                    $val = 'Null';
+                }
                 $return .= '<td>' . $val . '</td>';
             }
             $return .= '</tr>';
@@ -73,13 +76,23 @@ class Affichage extends FC_Controller {
         $return = '';
         foreach ($infos as $info){
             $return .= '<tr>';
-            foreach ($info as $i){
-                $return .= '<td>' . $i . '</td>';
+            foreach ($info as $key => $i){
+                //on adapte les infos affichées
+                switch (strtolower($key)) {
+                    case 'null':
+                        $return .= '<td>' . str_replace(['YES', 'NO'], ['Oui', 'Non'], $i) . '</td>';
+                        break;
+                    case 'key':
+                        $return .= '<td>' . str_replace(['PRI', 'MUL'], ['PK', 'FK'], $i) . '</td>';
+                        break;
+                    default:
+                        $return .= '<td>' . $i . '</td>';
+                        break;
+                }
+                
             }
             $return .= '</tr>';
         }
-        //On change clef primaire et etrangere par PK et FK
-        $return = str_replace('MUL', 'FK', str_replace('PRI', 'PK', $return));
         echo $return;
     }
     

@@ -14,7 +14,7 @@ class Donnee_model extends FC_Model {
         }
         $champ = rtrim($champ, ',');
         $value = rtrim($value, ',');
-        $sql = 'Insert into ' . $table . ' (' . $champ . ') Values (' . $value . ');';
+        $sql = 'Insert into ' . $table . ' (' . $champ . ') Values (' . $this->db->protect($value) . ');';
         $retour = $this->db->execute($sql, true);
         if (!is_string($retour)){
             return 'Ligne ajoutée';
@@ -28,12 +28,15 @@ class Donnee_model extends FC_Model {
         $set = '';
         $first = true;
         foreach ($data as $key => $val) {
-            $and = " And";
+            $and = ", ";
             if ($first) {
                 $and = "";
+                $first = false;
             }
             if (trim($val) != '') {
-                $set .= $and . " " . $key . " = '" . $val . "'";
+                $set .= $and . " " . $key . " = '" . $this->db->protect($val) . "'";
+            } else {
+                $set .= $and . " " . $key . " = null";
             }
         }
         //Id des parametre a mettre a jour

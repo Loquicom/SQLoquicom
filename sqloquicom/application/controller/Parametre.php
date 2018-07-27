@@ -5,28 +5,22 @@ class Parametre extends FC_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->session->connect !== false or redirect('Connexion');
+        //Si la securite est active
+        $this->load->controller('Securite');
+        if($this->controller('Securite')->is_secure()){
+            if(!$this->controller('Securite')->is_connect()){
+                redirect('Securite');
+            }
+        }
+        //$this->session->connect !== false or redirect('Connexion');
     }
 
     public function index() {
         //Recup de la liste des fichiers des bd sauvegarder
-        if (file_exists('../data/')) {
-            $files = array_diff(scandir('../data/'), array('..', '.', '.htaccess', 'export'));
-            //On verifie que les fichiers ne sont pas modifié
-            if (count($files) > 0) {
-                foreach ($files as $file) {
-                    $content = explode("\r\n", file_get_contents('../data/' . $file));
-                    //Si le fichier n'est pas bon on le supprile
-                    if ($content[1] !== md5($content[0])) {
-                        unlink('../data/' . $file);
-                    }
-                }
-                if (count(array_diff(scandir('../data/'), array('..', '.', '.htaccess'))) < 1) {
-                    $files = null;
-                }
-            } else {
-                $files = null;
-            }
+        $this->load->model('Securite_model');
+        $files = $this->Securite_model->get_files();
+        if($files === false){
+            $files = null;
         }
         $page = $this->load->view('params', array('bd' => $files), true);
         $this->load->view('webpage', array('body' => $page));
@@ -39,12 +33,15 @@ class Parametre extends FC_Controller {
     }
 
     public function ajx_supprFile() {
-        if($this->post('file') !== false && file_exists('../data/' . $this->post('file'))){
-            unlink('../data/' . $this->post('file'));
-            echo json_encode(array('etat' => 'ok'));
-            exit;
+        if($this->post('file') !== false){
+            $this->load->model('Securite_model');
+            $res =$this->Securite_model->remove_file($this->post('file'));
+            if($res !== false){
+                echo json_encode(array('etat' => 'ok'));
+                exit;
+            }
         }
-        echo json_encode(array('etat' => 'err'));
+        echo json_encode(array('etat' => 'err'));       
     }
 
 }

@@ -17,7 +17,7 @@ $data['root']['webroot'] = '';
 $htaccess = fopen('../.htaccess', 'w');
 if($htaccess === false){
     //Si le fichier n'est pas correctement ouvert
-    exit("Impossible de créer les fichiers de configuration);
+    exit("Impossible de créer les fichiers de configuration");
 }
 $code = 'Options +FollowSymLinks' . "\r\n\r\n";
 $code .= 'RewriteEngine On' . "\r\n\r\n";

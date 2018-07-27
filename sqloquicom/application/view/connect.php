@@ -18,30 +18,28 @@ global $_config;
         <form name="connect" method="POST">
             <div class="form-group">
                 <label for="hote">Nom de l'hote</label>
-                <input type="text" name="host" class="form-element" id="hote" placeholder="localhost">
+                <input type="text" name="host" class="form-element" id="hote" placeholder="localhost" required>
             </div>
             <div class="form-group">
                 <label for="base">Nom de la base</label>
-                <input type="text" name="name" class="form-element" id="base">
+                <input type="text" name="name" class="form-element" id="base" required>
             </div>
             <div class="form-group">
                 <label for="user">Login</label>
-                <input type="text" name="usr" class="form-element" id="user" placeholder="root">
+                <input type="text" name="usr" class="form-element" id="user" placeholder="root" required>
             </div>
             <div class="form-group">
                 <label for="mdp">Mot de passe</label>
                 <input type="password" name="pass" class="form-element" id="mdp">
             </div>
-            <?php if ($db !== null) { ?>
+            <?php if ($db !== null && !empty($db)) { ?>
                 <div class="form-group">
                     <label for="db">Base enregistr&eacute;e<?= (count($db) > 1) ? 's' : ''; ?> :</label>
                     <select id="save_db" class="form-element">
                         <option value="0" id="default_val" selected>S&eacute;lectionnez une base</option>
                         <?php
-                        foreach ($db as $base) {
-                            $host = explode("(-)", $base)[0];
-                            $name = str_replace('.dat', '', explode("(-)", $base)[1]);
-                            echo '<option value="' . $base . '">' . $host . ' : ' . $name . '</option>';
+                        foreach ($db as $name => $base) {
+                            echo '<option value="' . $name . '">' . $base['host'] . ' : ' . $base['name'] . '</option>';
                         }
                         ?>
                     </select>

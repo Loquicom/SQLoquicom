@@ -87,7 +87,7 @@ function _change_page_pagine(newPage) {
         //Si on a pagine sans coupure on retire la class active sur le btn actuel et on le met sur le nouveau
         $('#pagine_page_' + _paginePageActuel).removeClass('active');
         $('#pagine_page_' + newPage).addClass('active');
-        _paginePageActuel = newPage;
+        _paginePageActuel = parseInt(newPage);
     } else {
         var html = '<ul class="pagination"><li><span id="pagine-prev" class="btn btn-default">«</span></li>';
         if (['1', '2', '3', '' + (_pagineNbPage - 2), '' + (_pagineNbPage - 1), '' + (_pagineNbPage)].indexOf('' + newPage) !== -1) {
@@ -132,7 +132,7 @@ function _change_page_pagine(newPage) {
         //Ajout de la class active
         $('#pagine_page_' + newPage).addClass('active');
         //Mise ajour du pagine actuel
-        _paginePageActuel = newPage;
+        _paginePageActuel = parseInt(newPage);
     }
     //si on est sur la 1er on derniere page on disabled les bon btn
     if (_pagineNbPage == 1) {

@@ -95,25 +95,27 @@ $fc = get_instance();
 </style>
 
 <div class="container">
-    <div class="row">
-        <div class="col12">
-            <h1>Exporter</h1>
+    <?php if ($fc->session->connect !== false) { ?>
+        <div class="row">
+            <div class="col12">
+                <h1>Exporter</h1>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col4 center">
-            Exporter les tables et leurs contenue <br>
-            <button type="button" id="export_all" class="btn btn-primary main-color text-color">Exporter</button>
+        <div class="row">
+            <div class="col4 center">
+                Exporter les tables et leurs contenue <br>
+                <button type="button" id="export_all" class="btn btn-primary main-color text-color">Exporter</button>
+            </div>
+            <div class="col4 center">
+                Exporter les tables <br>
+                <button type="button" id="export_create" class="btn btn-primary main-color text-color">Exporter</button>
+            </div>
+            <div class="col4 center">
+                Exporter le contenues des tables <br>
+                <button type="button" id="export_insert" class="btn btn-primary main-color text-color">Exporter</button>
+            </div>
         </div>
-        <div class="col4 center">
-            Exporter les tables <br>
-            <button type="button" id="export_create" class="btn btn-primary main-color text-color">Exporter</button>
-        </div>
-        <div class="col4 center">
-            Exporter le contenues des tables <br>
-            <button type="button" id="export_insert" class="btn btn-primary main-color text-color">Exporter</button>
-        </div>
-    </div>
+    <?php } ?>
     <div class="row">
         <div class="col12">
             <h1>Personnalisation</h1>
@@ -184,7 +186,7 @@ $fc = get_instance();
             <h1>Gestion des bases de donn&eacute;es sauvegard&eacute;es</h1>
         </div>
     </div>
-    <div class="row" style="margin-bottom: 8em;">
+    <div class="row" style="margin-bottom: 2em;">
         <div class="col12">
             <table class="table">
                 <thead>
@@ -200,15 +202,13 @@ $fc = get_instance();
                     if ($bd === null) {
                         echo '<tr><td colspan="4"><div class="alert a-is-info"><i class="material-icons">info</i>Aucune base de donn&eacute;es sauvegard&eacute;es</div></td></tr>';
                     } else {
-                        foreach ($bd as $base) {
-                            $hote = explode('(-)', $base)[0];
-                            $nom = str_replace('.dat', '', explode('(-)', $base)[1]);
+                        foreach ($bd as $name => $base) {
                             ?>
                             <tr class="line">
-                                <td><?= $hote ?></td>
-                                <td><?= $nom ?></td>
-                                <td><?= $base ?></td>
-                                <td class="center"><button class="btn btn-default btn_action main-color text-color suppr_file" data-file="<?= $base ?>" title="supprimer"><i class="material-icons">delete_forever</i></button></td>
+                                <td><?= $base['host'] ?></td>
+                                <td><?= $base['name'] ?></td>
+                                <td><?= $name ?></td>
+                                <td class="center"><button class="btn btn-default btn_action main-color text-color suppr_file" data-file="<?= $name ?>" title="supprimer"><i class="material-icons">delete_forever</i></button></td>
                             </tr>
                             <?php
                         }
@@ -217,6 +217,27 @@ $fc = get_instance();
                 </tbody>
             </table>
         </div>
+    </div>
+    <!-- Activation / Desactivation securite -->
+    <div class="row">
+        <div class="col12">
+            <h1>Gestion de la s&eacute;curit&eacute;</h1>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 2em;">
+        <?php 
+        if($fc->session->secure){ ?>
+            <div class="col6 center">
+                <a href="<?= redirect_url('Securite/desactive') ?>" id="btn_remove_secure" class="btn btn-primary main-color text-color">Retirer la s&eacute;curit&eacute;</a>
+            </div>
+            <div class="col6 center">
+                <a href="<?= redirect_url('Securite/change') ?>" id="btn_change_pass" class="btn btn-primary main-color text-color">Changer le mot de passe</a>
+            </div>
+        <?php } else { ?>
+            <div class="col12 center">
+                <a href="<?= redirect_url('Securite/active') ?>" id="active_secure" class="btn btn-primary main-color text-color">Activer la s&eacute;curit&eacute;</a>
+            </div>
+        <?php } ?>
     </div>
 </div>
 

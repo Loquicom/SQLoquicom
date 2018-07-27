@@ -61,6 +61,7 @@ if ($config['debug']) {
 
 //Démarrage de la session
 if (trim(session_id()) === '') {
+    session_name('sqloquicom_sess');
     session_start();
     if (trim($config['session']) != '') {
         if (!isset($_SESSION[$config['session']])) {

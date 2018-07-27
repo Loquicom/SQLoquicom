@@ -22,7 +22,7 @@ class Database {
      * L'instance de pdo
      * @var PDO
      */
-    private $pdo = null;
+    public $pdo = null;
 
     /**
      * Prefix des tables
@@ -477,6 +477,7 @@ class Database {
     public function execute($sql = '', $excep = false, $statement = false) {
         //Si il y a une requete en parametre on l'execute
         if (trim($sql) != '') {
+            //Execution
             try {
                 $this->statement = $this->pdo->prepare($sql);
                 if($statement){
@@ -493,6 +494,7 @@ class Database {
         }
         //Sinon on exceute la requete de l'instance
         else if (trim($this->requete) != '') {
+            //Execution
             try {
                 $this->statement = $this->pdo->prepare($this->requete);
                 if($statement){
@@ -509,6 +511,16 @@ class Database {
         } else {
             return false;
         }
+    }
+
+    public function protect($string, $optional = false){
+        $string = htmlentities($string, ENT_QUOTES | ENT_HTML5);
+        $string = str_replace(['&#10;', '&newline;'], ["\n", "\n"], $string);
+        if(!$optional){
+            $string = str_replace(['&#34;', '&#39;', '&quot;', '&apos;'], ['\\"', "\\'", '\\"', "\\'"], $string);
+            $string = html_entity_decode($string, ENT_QUOTES | ENT_HTML5);
+        }
+        return $string;
     }
 
 }
